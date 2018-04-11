@@ -1,0 +1,4 @@
+pika
+jsonobject
+requests
+mypy

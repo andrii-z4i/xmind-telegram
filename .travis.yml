@@ -8,4 +8,4 @@ install:
 script:
         - python -m unittest discover command-acceptor/tests -p *tests.py -s command-acceptor
         - python -m unittest discover command-processor/tests -p *tests.py -s command-processor
-        - python -m unittest discover telegram-pusher/tests -p *tests.py -s telegram-pusher
+        - python -m unittest discover telegram-pusher/tests -p *Tests.py -s telegram-pusher
