@@ -26,7 +26,7 @@ class Request(object):
 class ResponseQueue(object):
     def __init__(self):
         super(ResponseQueue, self).__init__()
-        self.response: typing.List[Resposne] = []
+        self.response: typing.List[Response] = []
 
     def add_response(self, next_response: Response) -> None:
         self.response.append(next_response)

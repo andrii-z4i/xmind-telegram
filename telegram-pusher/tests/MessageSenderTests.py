@@ -1,16 +1,17 @@
 from unittest import TestCase
-from controller.PushController import PushController
+from controllers.implementations.MessageSender import MessageSender
+from exceptions.retry_exception import RetryException
 from model import Message, SentMessage
 import json
 from unittest.mock import Mock, patch
 
 
-class PushControllerTest(TestCase):
+class MessageSenderTest(TestCase):
     def setUp(self):
         self._queue_pusher = Mock()
         self._queue_pusher.put_message_to_queue.return_value = True
 
-    @patch('controller.PushController.post')
+    @patch('controllers.implementations.MessageSender.post')
     def test_send_message_success(self, requests_post: Mock) -> None:
         raw_response: dict = {
             'ok': True,
@@ -38,7 +39,7 @@ class PushControllerTest(TestCase):
             }
         }
 
-        ctrl: PushController = PushController(
+        ctrl: MessageSender = MessageSender(
             'http', 'localhost', 8080, 'botId:botKey', self._queue_pusher)
         message: Message = Message(chat_id=129868778, text='Super puper')
 
@@ -53,10 +54,10 @@ class PushControllerTest(TestCase):
         self.assertEqual(response.chat.chat_id, 129868778)
         self._queue_pusher.put_message_to_queue.assert_not_called()
 
-    @patch('controller.PushController.post')
+    @patch('controllers.implementations.MessageSender.post')
     def test_send_message_failure(self, requests_post: Mock) -> None:
 
-        ctrl: PushController = PushController(
+        ctrl: MessageSender = MessageSender(
             'http', 'localhost', 8080, 'something', self._queue_pusher)
         message: Message = Message(
             chat_id=129868778, text='Super puper')
@@ -73,7 +74,7 @@ class PushControllerTest(TestCase):
             thrown_exception.exception.args[0], "Bad response")
         self._queue_pusher.put_message_to_queue.assert_not_called()
 
-    @patch('controller.PushController.post')
+    @patch('controllers.implementations.MessageSender.post')
     def test_send_message_returns_error_with_retry(self, requests_post: Mock) -> None:
         raw_response: dict = {
             'ok': False,
@@ -83,7 +84,7 @@ class PushControllerTest(TestCase):
                 'retry_after': 11221
             }
         }
-        ctrl: PushController = PushController(
+        ctrl: MessageSender = MessageSender(
             'http', 'localhost', 8080, 'something', self._queue_pusher)
         message: Message = Message(
             chat_id=129868778, text='Super puper')
@@ -91,19 +92,24 @@ class PushControllerTest(TestCase):
         server_response = Mock(
             ok=True, content=json.dumps(raw_response).encode())
         requests_post.return_value = server_response
-        response = ctrl.send_message(message)
-        self.assertIsNone(response)
+        with self.assertRaises(RetryException) as _exception:
+            response = ctrl.send_message(message)
+
+        self.assertEqual(
+            _exception.exception.args[0], 11221)
+
         requests_post.assert_called_once_with(
             'http://localhost:8080/botsomething/sendMessage', json={"chat_id": 129868778, "text": "Super puper"})
-        self._queue_pusher.put_message_to_queue.assert_called_once_with(message, 11221)
+        self._queue_pusher.put_message_to_queue.assert_called_once_with(
+            message, 11221)
 
-    @patch('controller.PushController.post')
+    @patch('controllers.implementations.MessageSender.post')
     def test_send_message_returns_error_without_retry(self, requests_post: Mock) -> None:
         raw_response: dict = {
             'ok': False,
             'description': 'We can\'t accept message'
         }
-        ctrl: PushController = PushController(
+        ctrl: MessageSender = MessageSender(
             'http', 'localhost', 8080, 'something', self._queue_pusher)
         message: Message = Message(
             chat_id=129868778, text='Super puper')
@@ -120,4 +126,3 @@ class PushControllerTest(TestCase):
         requests_post.assert_called_once_with(
             'http://localhost:8080/botsomething/sendMessage', json={"chat_id": 129868778, "text": "Super puper"})
         self._queue_pusher.put_message_to_queue.assert_not_called()
-

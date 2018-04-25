@@ -1,14 +1,15 @@
+import controllers.interfaces as interfaces
 from model import Message, SentMessage, TelegramResponse
+from exceptions.retry_exception import RetryException
 from requests import post, Response
 import json
-from .QueuePusher import IQueuePusher
 
 
-class PushController(object):
-    def __init__(self, protocol: str, host: str, port: int, bot_key: str, queue_pusher: IQueuePusher) -> None:
-        super(PushController, self).__init__()
-        self._url = f"{protocol}://{host}:{port}/bot{bot_key}/"
-        self._queue_pusher = queue_pusher
+class MessageSender(interfaces.MessageSender):
+    def __init__(self, protocol: str, host: str, port: int, bot_key: str, queue_pusher: interfaces.QueuePusher) -> None:
+        super().__init__()
+        self._url: str = f"{protocol}://{host}:{port}/bot{bot_key}/"
+        self._queue_pusher: interfaces.QueuePusher = queue_pusher
 
     def send_message(self, message: Message) -> SentMessage:
         url: str = f"{self._url}sendMessage"
@@ -25,6 +26,6 @@ class PushController(object):
         if telegram_response.parameters.retry_after:
             self._queue_pusher.put_message_to_queue(
                 message, telegram_response.parameters.retry_after)
-            return None
+            raise RetryException(telegram_response.parameters.retry_after)
 
         raise Exception('We got a bad response')
