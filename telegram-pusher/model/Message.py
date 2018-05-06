@@ -5,3 +5,5 @@ class Message(JsonObject):
 
     chat_id = IntegerProperty()
     text = StringProperty()
+
+

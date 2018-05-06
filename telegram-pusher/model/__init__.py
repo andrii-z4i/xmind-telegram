@@ -4,6 +4,7 @@ from .ResponseParameters import ResponseParameters
 from .SentMessage import SentMessage
 from .TelegramResponse import TelegramResponse
 from .User import User
+from .MessageContainer import MessageContainer
 
 __all__ = [
     'Chat',
@@ -11,5 +12,6 @@ __all__ = [
     'ResponseParameters',
     'SentMessage',
     'TelegramResponse',
-    'User'
+    'User',
+    'MessageContainer'
 ]

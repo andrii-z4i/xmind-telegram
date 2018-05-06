@@ -2,3 +2,4 @@ pika
 jsonobject
 requests
 mypy
+pymysql
