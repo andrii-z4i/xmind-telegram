@@ -92,7 +92,7 @@ class QueueProcessorTests(TestCase):
             self._queue_pusher)
         self.assertIsNotNone(_queue_processor)
         self._message_sender.send_message.side_effect = RetryException(100)
-        self._queue_pusher.put_message_to_queue.return_value = None
+        self._queue_pusher.put_message_to_queue.return_value = True
         self._message_registrar.store_message.return_value = None
 
         _queue_processor.process_event({})
@@ -104,7 +104,28 @@ class QueueProcessorTests(TestCase):
         self._message_registrar.store_message.assert_not_called()
 
     @patch("controllers.implementations.QueueProcessor.Thread")
-    def test_process_event_retry_exception(self, thread: Mock) -> None:
+    def test_process_event_retry_exception_fail_to_put_message_to_queue(self, thread: Mock) -> None:
+        thread.return_value = 'super'
+        _queue_processor = QueueProcessor(
+            self._queue_channel,
+            self._message_sender,
+            self._message_registrar,
+            self._queue_pusher)
+        self.assertIsNotNone(_queue_processor)
+        self._message_sender.send_message.side_effect = RetryException(100)
+        self._queue_pusher.put_message_to_queue.return_value = False
+        self._message_registrar.store_message.return_value = None
+
+        _queue_processor.process_event({})
+
+        self._message_sender.send_message.assert_called_once()
+        self.assertIsNone(self._message_sender.send_message.call_args[0][0].text)
+        self.assertIsNone(self._message_sender.send_message.call_args[0][0].chat_id)
+        self._queue_pusher.put_message_to_queue.assert_called_once_with(ANY, 100)
+        self._message_registrar.store_message.assert_called_once_with(ANY)
+
+    @patch("controllers.implementations.QueueProcessor.Thread")
+    def test_process_event_bad_response_exception(self, thread: Mock) -> None:
         thread.return_value = 'super'
         _queue_processor = QueueProcessor(
             self._queue_channel,

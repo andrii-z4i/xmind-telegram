@@ -27,7 +27,8 @@ class QueueProcessor(interfaces.QueueProcessor):
         try:
             self._message_sender.send_message(_message.message)
         except RetryException as _ex:
-            self._queue_pusher.put_message_to_queue(_message, _ex.retry_after)
+            if not self._queue_pusher.put_message_to_queue(_message, _ex.retry_after):
+                self._message_registrar.store_message(_message)
         except BadResponseException:
             self._message_registrar.store_message(_message)
 
