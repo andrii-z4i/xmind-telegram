@@ -7,6 +7,6 @@ class ConfigurationFactory(object):
 
     @staticmethod
     def createConfiguration(directory: str, environment: str) -> interfaces.Configuration:
-        parser = Parser(f'./{directory}/{environment}.ini')
+        parser = Parser(f'{directory}/{environment}.ini')
         parser.parse()
         return impl.Configuration(parser)

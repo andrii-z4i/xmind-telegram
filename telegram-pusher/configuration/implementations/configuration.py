@@ -1,23 +1,70 @@
+from typing import Any
+
 import configuration.interfaces.configuration as interfaces
+from configuration.configuration_parser import Parser
 
 
 class Configuration(interfaces.Configuration):
 
-    def __init__(self, parser):
+    def __init__(self, parser: Parser) -> None:
         self._parser = parser
+
+    def get_any_value(self, key) -> Any:
+        if not self._parser:
+            raise Exception('Parser is not set')
+
+        return self._parser.get_value(key)
+
+    def get_int_value(self, key) -> int:
+        return int(self.get_any_value(key))
+
+    def get_str_value(self, key):
+        return str(self.get_any_value(key))
 
     @property
     def queueServer(self) -> str:
-        return self._parser.get_value('server.queueServer')
+        return self.get_str_value('server.queueServer')
 
     @property
     def queuePort(self) -> int:
-        return int(self._parser.get_value('server.queuePort'))
+        return self.get_int_value('server.queuePort')
 
     @property
     def messagesQueueName(self) -> str:
-        return self._parser.get_value('server.messagesQueueName')
+        return self.get_str_value('server.messagesQueueName')
 
     @property
     def errorsQueueName(self) -> str:
-        return self._parser.get_value('server.errorsQueueName')
+        return self.get_str_value('server.errorsQueueName')
+
+    @property
+    def telegramProtocol(self) -> str:
+        return self.get_str_value('telegram.protocol')
+
+    @property
+    def telegramPort(self) -> int:
+        return self.get_int_value('telegram.port')
+
+    @property
+    def telegramBotKey(self) -> str:
+        return self.get_str_value('telegram.botKey')
+
+    @property
+    def telegramHost(self) -> str:
+        return self.get_str_value('telegram.host')
+
+    @property
+    def databaseHost(self) -> str:
+        return self.get_str_value('database.host')
+
+    @property
+    def databaseName(self) -> str:
+        return self.get_str_value('database.name')
+
+    @property
+    def databaseUser(self) -> str:
+        return self.get_str_value('database.user')
+
+    @property
+    def databasePassword(self) -> str:
+        return self.get_str_value('database.password')

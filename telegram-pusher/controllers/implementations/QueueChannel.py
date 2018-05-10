@@ -16,8 +16,9 @@ class QueueChannel(interfaces.QueueChannel):
         self._callback: Callable[[dict], None] = None
 
     def __del__(self):
-        if self._connection:
-            self._connection.close()
+        _connection = getattr(self, "_connection", None)
+        if _connection and _connection.is_open:
+            _connection.close()
 
     def declare_queue(self) -> None:
         self._channel.queue_declare(queue=self._queue_name, durable=True)

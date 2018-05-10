@@ -99,7 +99,7 @@ class ConfigurationTests(TestCase):
             'a_directory', 'dev')
         self.assertEqual('parsed', _factory)
         _parser.parse.assert_called_once()
-        parser_mock.assert_called_once_with('./a_directory/dev.ini')
+        parser_mock.assert_called_once_with('a_directory/dev.ini')
         configuration_mock.assert_called_once_with(_parser)
 
     def test_configuration_parameters(self):
