@@ -1,15 +1,15 @@
 from unittest import TestCase
-from controllers.implementations.MessageSender import MessageSender
-from exceptions import BadResponseException
-from exceptions.retry_exception import RetryException
-from model import Message, SentMessage
+from src.controllers.implementations.MessageSender import MessageSender
+from src.exceptions import BadResponseException
+from src.exceptions.retry_exception import RetryException
+from src.model import Message, SentMessage
 import json
 from unittest.mock import Mock, patch
 
 
 class MessageSenderTest(TestCase):
 
-    @patch('controllers.implementations.MessageSender.post')
+    @patch('src.controllers.implementations.MessageSender.post')
     def test_send_message_success(self, requests_post: Mock) -> None:
         raw_response: dict = {
             'ok': True,
@@ -51,7 +51,7 @@ class MessageSenderTest(TestCase):
 
         self.assertEqual(response.chat.chat_id, 129868778)
 
-    @patch('controllers.implementations.MessageSender.post')
+    @patch('src.controllers.implementations.MessageSender.post')
     def test_send_message_failure(self, requests_post: Mock) -> None:
 
         ctrl: MessageSender = MessageSender(
@@ -70,7 +70,7 @@ class MessageSenderTest(TestCase):
         self.assertEqual(
             thrown_exception.exception.reason, "Bad response")
 
-    @patch('controllers.implementations.MessageSender.post')
+    @patch('src.controllers.implementations.MessageSender.post')
     def test_send_message_returns_error_with_retry(self, requests_post: Mock) -> None:
         raw_response: dict = {
             'ok': False,
@@ -97,7 +97,7 @@ class MessageSenderTest(TestCase):
         requests_post.assert_called_once_with(
             'http://localhost:8080/botsomething/sendMessage', json={"chat_id": 129868778, "text": "Super puper"})
 
-    @patch('controllers.implementations.MessageSender.post')
+    @patch('src.controllers.implementations.MessageSender.post')
     def test_send_message_returns_error_without_retry(self, requests_post: Mock) -> None:
         raw_response: dict = {
             'ok': False,

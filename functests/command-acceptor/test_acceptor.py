@@ -1,7 +1,7 @@
 from threading import Event
-from queue_consumer import ConsumerQueue
 from unittest import TestCase
 from requests import get
+from functests.common.queue_consumer import ConsumerQueue
 
 
 class TestAcceptor(TestCase):

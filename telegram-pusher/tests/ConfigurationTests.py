@@ -1,13 +1,13 @@
 from unittest import TestCase
 from unittest.mock import patch, Mock, MagicMock, call
-from configuration.configuration_parser import Parser
-from configuration.configuration_factory import ConfigurationFactory
-from configuration.implementations.configuration import Configuration
+from src.configuration.configuration_parser import Parser
+from src.configuration.configuration_factory import ConfigurationFactory
+from src.configuration.implementations.configuration import Configuration
 
 
 class ConfigurationTests(TestCase):
 
-    @patch('configuration.configuration_parser.ConfigParser')
+    @patch('src.configuration.configuration_parser.ConfigParser')
     def test_configuration_parser_constructor(self, configuration_parser: Mock):
         configuration_parser.return_value = 'a'
         _parser = Parser('some_name')
@@ -15,7 +15,7 @@ class ConfigurationTests(TestCase):
         configuration_parser.assert_called_once()
         self.assertEqual('some_name', _parser._file_name)
 
-    @patch('configuration.configuration_parser.open')
+    @patch('src.configuration.configuration_parser.open')
     def test_configuration_parser_parse_empty_file_name(self, open_file: Mock):
         with self.assertRaises(Exception) as _exception:
             _parser = Parser(None)
@@ -24,8 +24,8 @@ class ConfigurationTests(TestCase):
         self.assertEqual(_exception.exception.args[0], "File name is empty")
         open_file.assert_not_called()
 
-    @patch('configuration.configuration_parser.open')
-    @patch('configuration.configuration_parser.ConfigParser')
+    @patch('src.configuration.configuration_parser.open')
+    @patch('src.configuration.configuration_parser.ConfigParser')
     def test_configuration_parser_parse(self, config_parser: Mock, open_file: Mock):
         _file = MagicMock()
         _file.__exit__.return_value = None
@@ -42,7 +42,7 @@ class ConfigurationTests(TestCase):
         _config_parser_mock.read_file.assert_called_once()
         _file.__exit__.assert_called_once()
 
-    @patch('configuration.configuration_parser.ConfigParser')
+    @patch('src.configuration.configuration_parser.ConfigParser')
     def test_configuration_parser_get_value_no_dot(self, config_parser: Mock):
         _config_parser_mock = MagicMock()
         _config_parser_mock.__getitem__.return_value = 'Ok'
@@ -54,7 +54,7 @@ class ConfigurationTests(TestCase):
         self.assertEqual('Ok', _parser.get_value('ddd'))
         _config_parser_mock.__getitem__.assert_called_once_with('ddd')
 
-    @patch('configuration.configuration_parser.ConfigParser')
+    @patch('src.configuration.configuration_parser.ConfigParser')
     def test_configuration_parser_get_value(self, config_parser: Mock):
         _second_index = MagicMock()
         _second_index.__getitem__.return_value = 'Ok'
@@ -69,7 +69,7 @@ class ConfigurationTests(TestCase):
         _config_parser_mock.__getitem__.assert_called_once_with('ddd')
         _second_index.__getitem__.assert_called_once_with('bbb')
 
-    @patch('configuration.configuration_parser.ConfigParser')
+    @patch('src.configuration.configuration_parser.ConfigParser')
     def test_configuration_parser_get_value_three_dots(self, config_parser: Mock):
         _second_index = MagicMock()
         _second_index.__getitem__.return_value = 'Ok'
@@ -88,8 +88,8 @@ class ConfigurationTests(TestCase):
         _config_parser_mock.__getitem__.assert_not_called()
         _second_index.__getitem__.assert_not_called()
 
-    @patch('configuration.configuration_factory.Parser')
-    @patch('configuration.configuration_factory.impl.Configuration')
+    @patch('src.configuration.configuration_factory.Parser')
+    @patch('src.configuration.configuration_factory.impl.Configuration')
     def test_configuration_factory(self, configuration_mock: Mock, parser_mock: Mock):
         _parser = Mock()
         _parser.parse.return_value = None
@@ -120,8 +120,8 @@ class ConfigurationTests(TestCase):
 
         self.assertEqual(4, _parser_mock.get_value.call_count)
         self.assertEqual([
-            call('server.queueServer'),
-            call('server.queuePort'),
-            call('server.messagesQueueName'),
-            call('server.errorsQueueName'),
+            call('queue.queueServer'),
+            call('queue.queuePort'),
+            call('queue.messagesQueueName'),
+            call('queue.errorsQueueName'),
         ], _parser_mock.get_value.call_args_list)

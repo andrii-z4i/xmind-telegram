@@ -1,13 +1,12 @@
 from unittest import TestCase
 from unittest.mock import patch, Mock
-
-from controllers.implementations.QueueChannel import QueueChannel
+from src.controllers.implementations.QueueChannel import QueueChannel
 
 
 class QueueChannelTest(TestCase):
 
-    @patch("controllers.implementations.QueueChannel.ConnectionParameters")
-    @patch("controllers.implementations.QueueChannel.BlockingConnection")
+    @patch("src.controllers.implementations.QueueChannel.ConnectionParameters")
+    @patch("src.controllers.implementations.QueueChannel.BlockingConnection")
     def test_constructor(self, connection: Mock, parameters: Mock):
         _new_channel, _new_connection = self.prepare_channel(connection, parameters)
         _queue_channel = QueueChannel('a', 22, 'qqqq')
@@ -23,8 +22,8 @@ class QueueChannelTest(TestCase):
         del _queue_channel
         _new_connection.close.assert_called_once()
 
-    @patch("controllers.implementations.QueueChannel.ConnectionParameters")
-    @patch("controllers.implementations.QueueChannel.BlockingConnection")
+    @patch("src.controllers.implementations.QueueChannel.ConnectionParameters")
+    @patch("src.controllers.implementations.QueueChannel.BlockingConnection")
     def test_declare_queue(self, connection: Mock, parameters: Mock):
         _new_channel, _new_connection = self.prepare_channel(connection, parameters)
         _new_channel.queue_declare.return_value = None
@@ -35,8 +34,8 @@ class QueueChannelTest(TestCase):
         _new_channel.queue_declare.assert_called_once_with(queue='qqqq', durable=True)
         _new_channel.basic_qos.assert_called_once_with(prefetch_count=1)
 
-    @patch("controllers.implementations.QueueChannel.ConnectionParameters")
-    @patch("controllers.implementations.QueueChannel.BlockingConnection")
+    @patch("src.controllers.implementations.QueueChannel.ConnectionParameters")
+    @patch("src.controllers.implementations.QueueChannel.BlockingConnection")
     def test_set_inner_message_processor(self, connection: Mock, parameters: Mock):
         self.prepare_channel(connection, parameters)
         _queue_channel = QueueChannel('a', 22, 'qqqq')
@@ -48,8 +47,8 @@ class QueueChannelTest(TestCase):
         _queue_channel.set_inner_message_processor(test_callbck)
         self.assertEqual(_queue_channel._callback, test_callbck)
 
-    @patch("controllers.implementations.QueueChannel.ConnectionParameters")
-    @patch("controllers.implementations.QueueChannel.BlockingConnection")
+    @patch("src.controllers.implementations.QueueChannel.ConnectionParameters")
+    @patch("src.controllers.implementations.QueueChannel.BlockingConnection")
     def test_activate_consumer(self, connection: Mock, parameters: Mock):
         _new_channel, _ = self.prepare_channel(connection, parameters)
         _new_channel.basic_consume.return_value = 'new_tag'
@@ -61,8 +60,8 @@ class QueueChannelTest(TestCase):
         _new_channel.start_consuming.assert_called_once()
         self.assertEqual(_queue_channel._consumer_tag, 'new_tag')
 
-    @patch("controllers.implementations.QueueChannel.ConnectionParameters")
-    @patch("controllers.implementations.QueueChannel.BlockingConnection")
+    @patch("src.controllers.implementations.QueueChannel.ConnectionParameters")
+    @patch("src.controllers.implementations.QueueChannel.BlockingConnection")
     def test_deactivate_consumer(self, connection: Mock, parameters: Mock):
         _new_channel, _ = self.prepare_channel(connection, parameters)
         _new_channel.stop_consuming.return_value = None
@@ -72,8 +71,8 @@ class QueueChannelTest(TestCase):
         _queue_channel.deactivate_consumer()
         _new_channel.stop_consuming.assert_called_once_with('new_consumer_tag')
 
-    @patch("controllers.implementations.QueueChannel.ConnectionParameters")
-    @patch("controllers.implementations.QueueChannel.BlockingConnection")
+    @patch("src.controllers.implementations.QueueChannel.ConnectionParameters")
+    @patch("src.controllers.implementations.QueueChannel.BlockingConnection")
     def test__inner_processing(self, connection: Mock, parameters: Mock):
         _new_channel, _ = self.prepare_channel(connection, parameters)
         _new_channel.stop_consuming.return_value = None

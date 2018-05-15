@@ -3,14 +3,14 @@ from argparse import ArgumentParser, Namespace
 import time
 from typing import Any
 
-from configuration.configuration_factory import ConfigurationFactory
-from configuration.interfaces.configuration import Configuration
-from controllers.implementations.MessageRegistrar import MessageRegistrar
-from controllers.implementations.MessageSender import MessageSender
-from controllers.implementations.QueueChannel import QueueChannel
-from controllers.implementations.QueueProcessor import QueueProcessor
-from controllers.implementations.QueuePusher import QueuePusher
-import controllers.interfaces as interfaces
+from src.configuration.configuration_factory import ConfigurationFactory
+from src.configuration.interfaces.configuration import Configuration
+from src.controllers.implementations.MessageRegistrar import MessageRegistrar
+from src.controllers.implementations.MessageSender import MessageSender
+from src.controllers.implementations.QueueChannel import QueueChannel
+from src.controllers.implementations.QueueProcessor import QueueProcessor
+from src.controllers.implementations.QueuePusher import QueuePusher
+import src.controllers.interfaces as interfaces
 
 
 class GracefulKiller:

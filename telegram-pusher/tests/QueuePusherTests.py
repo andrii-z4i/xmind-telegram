@@ -1,16 +1,15 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
-
-from controllers.implementations.QueuePusher import QueuePusher
-from model import MessageContainer
+from src.controllers.implementations.QueuePusher import QueuePusher
+from src.model import MessageContainer
 
 
 class QueuePusherTests(TestCase):
     def setUp(self):
         pass
 
-    @patch("controllers.implementations.QueuePusher.pika.ConnectionParameters")
-    @patch("controllers.implementations.QueuePusher.pika.BlockingConnection")
+    @patch("src.controllers.implementations.QueuePusher.pika.ConnectionParameters")
+    @patch("src.controllers.implementations.QueuePusher.pika.BlockingConnection")
     def test_constructor(self, connection: Mock, connection_parameters: Mock) -> None:
         _new_blocking_connection: Mock = Mock()
         _new_blocking_connection.channel.return_value = 'channel'
@@ -30,8 +29,8 @@ class QueuePusherTests(TestCase):
         del _queue_pusher
         _new_blocking_connection.close.assert_called_once()
 
-    @patch("controllers.implementations.QueuePusher.pika.ConnectionParameters")
-    @patch("controllers.implementations.QueuePusher.pika.BlockingConnection")
+    @patch("src.controllers.implementations.QueuePusher.pika.ConnectionParameters")
+    @patch("src.controllers.implementations.QueuePusher.pika.BlockingConnection")
     def test_put_message_to_queue_exception(self, connection: Mock, connection_parameters: Mock) -> None:
         _new_blocking_connection: Mock = Mock()
         _new_blocking_connection.channel.return_value = None
@@ -48,9 +47,9 @@ class QueuePusherTests(TestCase):
 
         self.assertEqual(_exception.exception.args[0], "Channel is not set")
 
-    @patch("controllers.implementations.QueuePusher.pika.BasicProperties")
-    @patch("controllers.implementations.QueuePusher.pika.ConnectionParameters")
-    @patch("controllers.implementations.QueuePusher.pika.BlockingConnection")
+    @patch("src.controllers.implementations.QueuePusher.pika.BasicProperties")
+    @patch("src.controllers.implementations.QueuePusher.pika.ConnectionParameters")
+    @patch("src.controllers.implementations.QueuePusher.pika.BlockingConnection")
     def test_put_message_to_queue_success(
             self,
             connection: Mock,

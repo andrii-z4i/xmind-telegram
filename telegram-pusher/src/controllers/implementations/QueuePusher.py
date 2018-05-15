@@ -1,9 +1,7 @@
 import json
-
 import pika
-
-import controllers.interfaces as interfaces
-from model import MessageContainer
+import src.controllers.interfaces as interfaces
+from src.model import MessageContainer
 
 
 class QueuePusher(interfaces.QueuePusher):
@@ -16,8 +14,9 @@ class QueuePusher(interfaces.QueuePusher):
         self._channel = self._connection.channel()
 
     def __del__(self):
-        if self._connection:
-            self._connection.close()
+        _connection = getattr(self, "_connection", None)
+        if _connection and _connection.is_open:
+            _connection.close()
 
     def put_message_to_queue(self, message: MessageContainer, retry_after: int) -> bool:
         if self._channel:

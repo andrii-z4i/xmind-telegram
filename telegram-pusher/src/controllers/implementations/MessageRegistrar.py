@@ -1,9 +1,9 @@
 import json
-
 import pymysql
-import controllers.interfaces as interfaces
-from model import MessageContainer
+import src.controllers.interfaces as interfaces
+from src.model import MessageContainer
 from datetime import datetime
+import re
 
 
 class MessageRegistrar(interfaces.MessageRegistrar):
@@ -15,13 +15,13 @@ class MessageRegistrar(interfaces.MessageRegistrar):
             password=password,
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor)
-        self._sql = "INSERT INTO `messages` (`message`, `time`) VALUES (%s, %f)"
+        self._sql = "INSERT INTO `messages` (`message`, `time`) VALUES (\"%s\", %f)"
 
     def __del__(self):
         self._connection.close()
 
     def store_message(self, message: MessageContainer) -> None:
         with self._connection.cursor() as _cursor:
-            _message_str = json.dumps(message.to_json())
-            _cursor.execute(self._sql, (_message_str,  datetime.utcnow().timestamp()))
+            _message_str = re.escape(json.dumps(message.to_json()))
+            _cursor.execute(self._sql % (_message_str,  datetime.utcnow().timestamp()))
         self._connection.commit()

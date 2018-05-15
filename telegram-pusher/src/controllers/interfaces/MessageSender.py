@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from model.Message import Message
-from model.SentMessage import SentMessage
+from src.model.Message import Message
+from src.model.SentMessage import SentMessage
 
 
 class MessageSender(ABC):

@@ -4,19 +4,58 @@ services:
   mockServer:
     image: jamesdbloom/mockserver:latest
     ports:
-      - 1080:1080
+      - "1080:1080"
     environment:
       - LOG_LEVEL=INFO
-  
-  queueServer:
-    image: rabbitmq:latest
+
+  mysql-server:
+    image: mysql:5
+    container_name: test-mysql
     ports:
-      - 1082:5672
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: "badmessages"
+      MYSQL_USER: "test"
+      MYSQL_PASSWORD: "test"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - "./mysql:/var/lib/mysql"
+      - "./mysql-init:/docker-entrypoint-initdb.d/:ro"
+
+  queueServer: # guest:guest
+    image: rabbitmq:management
+    ports:
+    - "4369:4369"
+    - "5671:5671"
+    - "5672:5672"
+    - "25672:25672"
+    - "15671:15671"
+    - "15672:15672"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
 
   command-acceptor:
-    build: ..\command-acceptor
+    build: ../command-acceptor
     command: python run.py
     ports:
-      - 1081:8080
+      - "1081:8080"
     depends_on:
       - queueServer
+
+  telegram-pusher:
+    build: ../telegram-pusher
+    command: python run.py -d /cfg -e dev
+    restart: on-failure
+    links:
+      - queueServer
+      - mysql-server
+      - mockServer
+    depends_on:
+      - mockServer
+      - queueServer
+      - mysql-server

@@ -1,7 +1,7 @@
 from typing import Any
 
-import configuration.interfaces.configuration as interfaces
-from configuration.configuration_parser import Parser
+import src.configuration.interfaces.configuration as interfaces
+from src.configuration.configuration_parser import Parser
 
 
 class Configuration(interfaces.Configuration):
@@ -23,19 +23,19 @@ class Configuration(interfaces.Configuration):
 
     @property
     def queueServer(self) -> str:
-        return self.get_str_value('server.queueServer')
+        return self.get_str_value('queue.queueServer')
 
     @property
     def queuePort(self) -> int:
-        return self.get_int_value('server.queuePort')
+        return self.get_int_value('queue.queuePort')
 
     @property
     def messagesQueueName(self) -> str:
-        return self.get_str_value('server.messagesQueueName')
+        return self.get_str_value('queue.messagesQueueName')
 
     @property
     def errorsQueueName(self) -> str:
-        return self.get_str_value('server.errorsQueueName')
+        return self.get_str_value('queue.errorsQueueName')
 
     @property
     def telegramProtocol(self) -> str:

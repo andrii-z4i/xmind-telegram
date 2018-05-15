@@ -1,6 +1,5 @@
 from jsonobject import JsonObject, IntegerProperty, ObjectProperty, StringProperty
-
-from model import Message
+from src.model import Message
 
 
 class MessageContainer(JsonObject):

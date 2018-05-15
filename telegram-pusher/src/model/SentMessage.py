@@ -1,6 +1,6 @@
 from jsonobject import JsonObject, IntegerProperty, ObjectProperty
-from model.Chat import Chat
-from model.User import User
+from src.model.Chat import Chat
+from src.model.User import User
 
 
 class SentMessage(JsonObject):

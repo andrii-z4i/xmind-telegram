@@ -1,0 +1,7 @@
+pika
+jsonobject
+requests
+mypy
+pymysql
+flask
+flask-restful

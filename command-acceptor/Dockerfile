@@ -1,4 +1,4 @@
-FROM python:3.6.3-alpine
+FROM z4inode/telegram-bot:2.0.0
 RUN mkdir /app
 WORKDIR /app
 ADD ./requirements.txt /app/

@@ -1,9 +1,8 @@
-from threading import Event, Thread
-
-import controllers.interfaces as interfaces
-from exceptions import BadResponseException
-from exceptions import RetryException
-from model import MessageContainer
+from threading import Thread
+import src.controllers.interfaces as interfaces
+from src.exceptions import BadResponseException
+from src.exceptions import RetryException
+from src.model import MessageContainer
 
 
 class QueueProcessor(interfaces.QueueProcessor):

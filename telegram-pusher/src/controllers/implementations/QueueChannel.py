@@ -1,6 +1,6 @@
 import json
 from typing import Callable
-import controllers.interfaces as interfaces
+import src.controllers.interfaces as interfaces
 from pika import BlockingConnection, ConnectionParameters
 
 

@@ -1,6 +1,6 @@
-from configuration.configuration_parser import Parser
-import configuration.interfaces.configuration as interfaces
-import configuration.implementations.configuration as impl
+from src.configuration.configuration_parser import Parser
+import src.configuration.interfaces.configuration as interfaces
+import src.configuration.implementations.configuration as impl
 
 
 class ConfigurationFactory(object):
