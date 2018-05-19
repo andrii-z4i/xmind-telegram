@@ -18,10 +18,11 @@ class MessageRegistrar(interfaces.MessageRegistrar):
         self._sql = "INSERT INTO `messages` (`message`, `time`) VALUES (\"%s\", %f)"
 
     def __del__(self):
-        self._connection.close()
+        connection = getattr(self, "_connection", None)
+        if connection:
+            connection.close()
 
     def store_message(self, message: MessageContainer) -> None:
-        with self._connection.cursor() as _cursor:
+        with self._connection as _cursor:
             _message_str = re.escape(json.dumps(message.to_json()))
             _cursor.execute(self._sql % (_message_str,  datetime.utcnow().timestamp()))
-        self._connection.commit()

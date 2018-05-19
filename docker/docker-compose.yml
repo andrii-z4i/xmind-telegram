@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  mockServer:
+  mock-server:
     image: jamesdbloom/mockserver:latest
     ports:
       - "1080:1080"
@@ -24,7 +24,7 @@ services:
       - "./mysql:/var/lib/mysql"
       - "./mysql-init:/docker-entrypoint-initdb.d/:ro"
 
-  queueServer: # guest:guest
+  queue-server: # guest:guest
     image: rabbitmq:management
     ports:
     - "4369:4369"
@@ -45,17 +45,17 @@ services:
     ports:
       - "1081:8080"
     depends_on:
-      - queueServer
+      - queue-server
 
   telegram-pusher:
     build: ../telegram-pusher
     command: python run.py -d /cfg -e dev
     restart: on-failure
     links:
-      - queueServer
+      - queue-server
       - mysql-server
-      - mockServer
+      - mock-server
     depends_on:
-      - mockServer
-      - queueServer
+      - mock-server
+      - queue-server
       - mysql-server

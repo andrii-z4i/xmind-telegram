@@ -10,7 +10,7 @@ class MessageRegistrarTest(TestCase):
     sql = "INSERT INTO `messages` (`message`, `time`) VALUES (\"%s\", %f)"
 
     def setUp(self) -> None:
-        _connection: Mock = Mock()
+        _connection: MagicMock = MagicMock()
         _connection.close.return_value = None
         self._connection: Mock = _connection
 
@@ -28,7 +28,7 @@ class MessageRegistrarTest(TestCase):
     @patch("src.controllers.implementations.MessageRegistrar.pymysql.connect")
     def test_store_message(self, connect: Mock, dt: Mock):
         _cursor: MagicMock = MagicMock()
-        self._connection.cursor.return_value = _cursor
+        self._connection.return_value = _cursor
         self._connection.commit.return_value = None
         connect.return_value = self._connection
 
@@ -36,9 +36,9 @@ class MessageRegistrarTest(TestCase):
         _registrar: MessageRegistrar = MessageRegistrar('a', 'b', 'c', 'd')
         _message_container: MessageContainer = MessageContainer({})
         _registrar.store_message(_message_container)
-        _cursor.__enter__.return_value.execute.assert_called_once_with(
+        connect.return_value.__enter__.return_value.execute.assert_called_once_with(
             'INSERT INTO `messages` (`message`, `time`) VALUES ("\\{\\"retry_after\\"\\:\\ null\\,\\ \\"create_time'
             '\\"\\:\\ null\\,\\ \\"retry_count\\"\\:\\ null\\,\\ \\"message_type\\"\\:\\ null\\,\\ \\"message'
             '\\"\\:\\ \\{\\"chat_id\\"\\:\\ null\\,\\ \\"text\\"\\:\\ null\\}\\}", 666.555000)')
-        self._connection.commit.assert_called_once()
+        connect.return_value.__exit__.assert_called_once()
 
