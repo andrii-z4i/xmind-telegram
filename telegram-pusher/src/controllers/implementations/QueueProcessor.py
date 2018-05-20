@@ -1,3 +1,5 @@
+import json
+import re
 from threading import Thread
 import src.controllers.interfaces as interfaces
 from src.exceptions import BadResponseException
@@ -22,14 +24,16 @@ class QueueProcessor(interfaces.QueueProcessor):
             target=lambda x: x._channel.start_consuming(), args=(self,))
 
     def process_event(self, body: dict) -> None:
-        _message = MessageContainer(body)
+        _message: MessageContainer = None
         try:
+            _message = MessageContainer(body)
             self._message_sender.send_message(_message.message)
         except RetryException as _ex:
             if not self._queue_pusher.put_message_to_queue(_message, _ex.retry_after):
                 self._message_registrar.store_message(_message)
-        except BadResponseException:
-            self._message_registrar.store_message(_message)
+        except:
+            _message_str = re.escape(json.dumps(body))
+            self._message_registrar.store_message(_message_str)
 
     def start(self) -> None:
         self._channel.activate_consumer()

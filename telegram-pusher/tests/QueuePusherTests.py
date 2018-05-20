@@ -3,6 +3,8 @@ from unittest.mock import Mock, patch
 from src.controllers.implementations.QueuePusher import QueuePusher
 from src.model import MessageContainer
 
+_predefined_message = {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}}
+
 
 class QueuePusherTests(TestCase):
     def setUp(self):
@@ -40,7 +42,7 @@ class QueuePusherTests(TestCase):
         _queue_pusher = QueuePusher('server', 1111, 'qqqq')
         self.assertIsNotNone(_queue_pusher)
 
-        _message_container: MessageContainer = MessageContainer({})
+        _message_container: MessageContainer = MessageContainer(_predefined_message)
 
         with self.assertRaises(Exception) as _exception:
             _queue_pusher.put_message_to_queue(_message_container, 500)
@@ -70,10 +72,10 @@ class QueuePusherTests(TestCase):
         _queue_pusher = QueuePusher('server', 1111, 'qqqq')
         self.assertIsNotNone(_queue_pusher)
 
-        _message_container: MessageContainer = MessageContainer({})
+        _message_container: MessageContainer = MessageContainer(_predefined_message)
         self.assertTrue(_queue_pusher.put_message_to_queue(_message_container, 500))
-        _expected_body = '{"retry_after": 500, "create_time": null, "retry_count": 1, "message_type": null, ' \
-                         '"message": {"chat_id": null, "text": null}}'
+        _expected_body = '{"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}, "retry_count": 1, ' \
+                         '"retry_after": 500}'
         _channel.basic_publish.assert_called_once_with(
             exchange='',
             routing_key='qqqq',

@@ -3,8 +3,6 @@ from unittest.mock import Mock, patch, MagicMock
 from src.controllers.implementations.MessageRegistrar import MessageRegistrar
 from pymysql.cursors import DictCursor
 
-from src.model import MessageContainer
-
 
 class MessageRegistrarTest(TestCase):
     sql = "INSERT INTO `messages` (`message`, `time`) VALUES (\"%s\", %f)"
@@ -34,11 +32,8 @@ class MessageRegistrarTest(TestCase):
 
         dt.utcnow.return_value.timestamp.return_value = 666.555
         _registrar: MessageRegistrar = MessageRegistrar('a', 'b', 'c', 'd')
-        _message_container: MessageContainer = MessageContainer({})
-        _registrar.store_message(_message_container)
+        _registrar.store_message("Strange message")
         connect.return_value.__enter__.return_value.execute.assert_called_once_with(
-            'INSERT INTO `messages` (`message`, `time`) VALUES ("\\{\\"retry_after\\"\\:\\ null\\,\\ \\"create_time'
-            '\\"\\:\\ null\\,\\ \\"retry_count\\"\\:\\ null\\,\\ \\"message_type\\"\\:\\ null\\,\\ \\"message'
-            '\\"\\:\\ \\{\\"chat_id\\"\\:\\ null\\,\\ \\"text\\"\\:\\ null\\}\\}", 666.555000)')
+            'INSERT INTO `messages` (`message`, `time`) VALUES ("Strange message", 666.555000)')
         connect.return_value.__exit__.assert_called_once()
 

@@ -4,6 +4,7 @@ from src.controllers.implementations.QueueProcessor import QueueProcessor
 from src.controllers.interfaces import QueueChannel, MessageSender, MessageRegistrar, QueuePusher
 from src.exceptions import RetryException, BadResponseException
 
+_predefined_message = {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}}
 
 class QueueProcessorTests(TestCase):
     def setUp(self):
@@ -73,11 +74,11 @@ class QueueProcessorTests(TestCase):
         self._queue_pusher.put_message_to_queue.return_value = None
         self._message_registrar.store_message.return_value = None
 
-        _queue_processor.process_event({})
+        _queue_processor.process_event(_predefined_message)
 
         self._message_sender.send_message.assert_called_once()
-        self.assertIsNone(self._message_sender.send_message.call_args[0][0].text)
-        self.assertIsNone(self._message_sender.send_message.call_args[0][0].chat_id)
+        self.assertEqual("Hello", self._message_sender.send_message.call_args[0][0].text)
+        self.assertEqual(12, self._message_sender.send_message.call_args[0][0].chat_id)
         self._queue_pusher.put_message_to_queue.assert_not_called()
         self._message_registrar.store_message.assert_not_called()
 
@@ -94,11 +95,11 @@ class QueueProcessorTests(TestCase):
         self._queue_pusher.put_message_to_queue.return_value = True
         self._message_registrar.store_message.return_value = None
 
-        _queue_processor.process_event({})
+        _queue_processor.process_event(_predefined_message)
 
         self._message_sender.send_message.assert_called_once()
-        self.assertIsNone(self._message_sender.send_message.call_args[0][0].text)
-        self.assertIsNone(self._message_sender.send_message.call_args[0][0].chat_id)
+        self.assertEqual("Hello", self._message_sender.send_message.call_args[0][0].text)
+        self.assertEqual(12, self._message_sender.send_message.call_args[0][0].chat_id)
         self._queue_pusher.put_message_to_queue.assert_called_once_with(ANY, 100)
         self._message_registrar.store_message.assert_not_called()
 
@@ -115,11 +116,11 @@ class QueueProcessorTests(TestCase):
         self._queue_pusher.put_message_to_queue.return_value = False
         self._message_registrar.store_message.return_value = None
 
-        _queue_processor.process_event({})
+        _queue_processor.process_event(_predefined_message)
 
         self._message_sender.send_message.assert_called_once()
-        self.assertIsNone(self._message_sender.send_message.call_args[0][0].text)
-        self.assertIsNone(self._message_sender.send_message.call_args[0][0].chat_id)
+        self.assertEqual("Hello", self._message_sender.send_message.call_args[0][0].text)
+        self.assertEqual(12, self._message_sender.send_message.call_args[0][0].chat_id)
         self._queue_pusher.put_message_to_queue.assert_called_once_with(ANY, 100)
         self._message_registrar.store_message.assert_called_once_with(ANY)
 
@@ -136,10 +137,29 @@ class QueueProcessorTests(TestCase):
         self._queue_pusher.put_message_to_queue.return_value = None
         self._message_registrar.store_message.return_value = None
 
-        _queue_processor.process_event({})
+        _queue_processor.process_event(_predefined_message)
 
         self._message_sender.send_message.assert_called_once()
-        self.assertIsNone(self._message_sender.send_message.call_args[0][0].text)
-        self.assertIsNone(self._message_sender.send_message.call_args[0][0].chat_id)
+        self.assertEqual("Hello", self._message_sender.send_message.call_args[0][0].text)
+        self.assertEqual(12, self._message_sender.send_message.call_args[0][0].chat_id)
         self._queue_pusher.put_message_to_queue.assert_not_called()
         self._message_registrar.store_message.assert_called_once_with(ANY)
+
+    @patch("src.controllers.implementations.QueueProcessor.Thread")
+    def test_process_event_bad_message_exception(self, thread: Mock) -> None:
+        thread.return_value = 'super'
+        _queue_processor = QueueProcessor(
+            self._queue_channel,
+            self._message_sender,
+            self._message_registrar,
+            self._queue_pusher)
+        self.assertIsNotNone(_queue_processor)
+        self._message_sender.send_message.side_effect = BadResponseException('strange')
+        self._queue_pusher.put_message_to_queue.return_value = None
+        self._message_registrar.store_message.return_value = None
+
+        _queue_processor.process_event({})
+
+        self._message_sender.send_message.assert_not_called()
+        self._queue_pusher.put_message_to_queue.assert_not_called()
+        self._message_registrar.store_message.assert_called_once_with('\\{\\}')

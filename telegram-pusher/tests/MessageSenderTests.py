@@ -119,4 +119,3 @@ class MessageSenderTest(TestCase):
             thrown_exception.exception.reason, "We got a bad response")
         requests_post.assert_called_once_with(
             'http://localhost:8080/botsomething/sendMessage', json={"chat_id": 129868778, "text": "Super puper"})
-

@@ -22,7 +22,6 @@ class MessageRegistrar(interfaces.MessageRegistrar):
         if connection:
             connection.close()
 
-    def store_message(self, message: MessageContainer) -> None:
+    def store_message(self, message_body: str) -> None:
         with self._connection as _cursor:
-            _message_str = re.escape(json.dumps(message.to_json()))
-            _cursor.execute(self._sql % (_message_str,  datetime.utcnow().timestamp()))
+            _cursor.execute(self._sql % (message_body,  datetime.utcnow().timestamp()))

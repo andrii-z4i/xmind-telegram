@@ -5,5 +5,5 @@ from src.model import MessageContainer
 class MessageRegistrar(ABC):
 
     @abstractmethod
-    def store_message(self, message: MessageContainer) -> None:
+    def store_message(self, message_body: str) -> None:
         raise NotImplementedError()
