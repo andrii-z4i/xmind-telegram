@@ -3,7 +3,8 @@ from unittest.mock import Mock, patch
 from src.controllers.implementations.QueuePusher import QueuePusher
 from src.model import MessageContainer
 
-_predefined_message = {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}}
+_predefined_message = {"message_type": "error",
+                       "message": {"chat_id": 12, "text": "Hello"}}
 
 
 class QueuePusherTests(TestCase):
@@ -25,7 +26,8 @@ class QueuePusherTests(TestCase):
         self.assertEqual(_queue_pusher._queue_name, 'qqqq')
         self.assertEqual(_queue_pusher._channel, 'channel')
         connection.assert_called_once_with('new_parameters')
-        connection_parameters.assert_called_once_with('server', 1111)
+        connection_parameters.assert_called_once_with(
+            'server', 1111, connection_attempts=3, retry_delay=5)
         _new_blocking_connection.channel.assert_called_once()
 
         del _queue_pusher
@@ -42,7 +44,8 @@ class QueuePusherTests(TestCase):
         _queue_pusher = QueuePusher('server', 1111, 'qqqq')
         self.assertIsNotNone(_queue_pusher)
 
-        _message_container: MessageContainer = MessageContainer(_predefined_message)
+        _message_container: MessageContainer = MessageContainer(
+            _predefined_message)
 
         with self.assertRaises(Exception) as _exception:
             _queue_pusher.put_message_to_queue(_message_container, 500)
@@ -72,8 +75,10 @@ class QueuePusherTests(TestCase):
         _queue_pusher = QueuePusher('server', 1111, 'qqqq')
         self.assertIsNotNone(_queue_pusher)
 
-        _message_container: MessageContainer = MessageContainer(_predefined_message)
-        self.assertTrue(_queue_pusher.put_message_to_queue(_message_container, 500))
+        _message_container: MessageContainer = MessageContainer(
+            _predefined_message)
+        self.assertTrue(_queue_pusher.put_message_to_queue(
+            _message_container, 500))
         _expected_body = '{"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}, "retry_count": 1, ' \
                          '"retry_after": 500}'
         _channel.basic_publish.assert_called_once_with(
@@ -82,4 +87,3 @@ class QueuePusherTests(TestCase):
             body=_expected_body,
             properties='basic_properties')
         basic_properties.assert_called_once_with(delivery_mode=2)
-

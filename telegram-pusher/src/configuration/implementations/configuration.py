@@ -2,18 +2,24 @@ from typing import Any
 
 import src.configuration.interfaces.configuration as interfaces
 from src.configuration.configuration_parser import Parser
+from src.configuration.logging_configuration import create_logger, Logger, log_exception
 
 
 class Configuration(interfaces.Configuration):
 
     def __init__(self, parser: Parser) -> None:
+        self.logger: Logger = create_logger("Configuration")
+        self.logger.debug("in __init__")
         self._parser = parser
 
     def get_any_value(self, key) -> Any:
+        self.logger.debug(f"in get any value for {key}")
         if not self._parser:
+            self.logger.error("Parser is not set")
             raise Exception('Parser is not set')
-
-        return self._parser.get_value(key)
+        value = self._parser.get_value(key)
+        self.logger.debug(f"got value {value}")
+        return value
 
     def get_int_value(self, key) -> int:
         return int(self.get_any_value(key))
