@@ -2,7 +2,6 @@ import json
 import pymysql
 import src.controllers.interfaces as interfaces
 from src.model import MessageContainer
-from datetime import datetime
 import re
 from src.configuration.logging_configuration import create_logger, Logger, log_exception
 
@@ -18,7 +17,7 @@ class MessageRegistrar(interfaces.MessageRegistrar):
             password=password,
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor)
-        self._sql = "INSERT INTO `messages` (`message`, `time`) VALUES (\"%s\", %f)"
+        self._sql = "INSERT INTO `messages` (`message`, `time`) VALUES (\"%s\", now())"
 
     def __del__(self):
         self.logger.debug("in __del__")
@@ -30,6 +29,5 @@ class MessageRegistrar(interfaces.MessageRegistrar):
     def store_message(self, message_body: str) -> None:
         self.logger.debug("store message %s" % message_body)
         with self._connection as _cursor:
-            _cursor.execute(self._sql %
-                            (message_body,  datetime.utcnow().timestamp()))
+            _cursor.execute(self._sql % message_body)
             self.logger.debug("message stored")
