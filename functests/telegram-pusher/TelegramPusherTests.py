@@ -6,7 +6,8 @@ from common.message_registrar import MessageRegistrar
 from common.queue_pusher import QueuePusher
 import json
 
-_predefined_message = {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}}
+_predefined_message = {"message_type": "error",
+                       "message": {"chat_id": 12, "text": "Hello"}}
 
 
 class TelegramPusherTests(TestCase):
@@ -28,9 +29,10 @@ class TelegramPusherTests(TestCase):
         self._mock_server.expect(
             mk.request(method="POST", path="/botadfaadf/sendMessage",
                        body=json.dumps({"chat_id": 12, "text": "Hello"})),
-            mk.json_response(200, response),
+            mk.json_response(code=200, body=response),
             mk.times(1))
-        self._queue.put_message_to_queue({"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}})
+        self._queue.put_message_to_queue(
+            {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}})
         sleep(1)
         self._mock_server.verify()
         messages = self._db.get_all_message()
@@ -41,15 +43,17 @@ class TelegramPusherTests(TestCase):
         self._mock_server.expect(
             mk.request(method="POST", path="/botadfaadf/sendMessage",
                        body=json.dumps({"chat_id": 12, "text": "Hello"})),
-            mk.json_response(404, response),
+            mk.json_response(code=404, body=response),
             mk.times(1))
-        self._queue.put_message_to_queue({"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}})
+        self._queue.put_message_to_queue(
+            {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}})
         sleep(1)
         self._mock_server.verify()
         messages = self._db.get_all_message()
         self.assertEqual(1, len(messages))
         message = messages[0]
-        self.assertEqual('{"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}}', message['message'])
+        self.assertEqual(
+            '{"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}}', message['message'])
         self.assertIsNotNone(message['time'])
 
     def test_wrong_message_container(self):
@@ -57,7 +61,7 @@ class TelegramPusherTests(TestCase):
         self._mock_server.expect(
             mk.request(method="POST", path="/botadfaadf/sendMessage",
                        body=json.dumps({"chat_id": None, "text": None})),
-            mk.json_response(404, response),
+            mk.json_response(code=404, body=response),
             mk.times(0))
         self._queue.put_message_to_queue({"something": "do"})
         sleep(1)
@@ -67,4 +71,3 @@ class TelegramPusherTests(TestCase):
         message = messages[0]
         self.assertEqual('{"something": "do"}', message['message'])
         self.assertIsNotNone(message['time'])
-

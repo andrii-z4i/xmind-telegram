@@ -29,5 +29,7 @@ class MessageRegistrar(interfaces.MessageRegistrar):
     def store_message(self, message_body: str) -> None:
         self.logger.debug("store message %s" % message_body)
         with self._connection as _cursor:
+            self.logger.debug("Execute")
+            self.logger.debug(self._sql % message_body)
             _cursor.execute(self._sql % message_body)
             self.logger.debug("message stored")

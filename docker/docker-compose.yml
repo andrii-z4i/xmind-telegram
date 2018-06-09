@@ -51,6 +51,8 @@ services:
     build: ../telegram-pusher
     command: python run.py -d /cfg -e dev
     restart: on-failure
+    volumes:
+      - "./logs:/src/logs"
     links:
       - queue-server
       - mysql-server

@@ -18,7 +18,7 @@ class GracefulKiller:
     kill_now = False
 
     def __init__(self):
-        self.logger: Logger = lc.create_logger('GracefulKiller')
+        self.logger: Logger = create_logger('GracefulKiller')
         signal.signal(signal.SIGINT, self.exit_gracefully)
         signal.signal(signal.SIGTERM, self.exit_gracefully)
 
