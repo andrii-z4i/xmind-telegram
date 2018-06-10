@@ -2,7 +2,7 @@ import json
 from typing import Callable
 import src.controllers.interfaces as interfaces
 from pika import BlockingConnection, ConnectionParameters
-from src.configuration.logging_configuration import create_logger, Logger, log_exception
+from configuration.logging_configuration import create_logger, Logger, log_exception
 
 
 class QueueChannel(interfaces.QueueChannel):

@@ -1,7 +1,7 @@
-from src.configuration.configuration_parser import Parser
-import src.configuration.interfaces.configuration as interfaces
-import src.configuration.implementations.configuration as impl
-from src.configuration.logging_configuration import create_logger, Logger, log_exception
+from configuration.configuration_parser import Parser
+import configuration.interfaces.configuration as interfaces
+import configuration.implementations.configuration as impl
+from configuration.logging_configuration import create_logger, Logger, log_exception
 
 
 class ConfigurationFactory(object):

@@ -8,6 +8,8 @@ RUN apk add --update \
     && rm -rf /var/cache/apk/*
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 ENV PYTHONUNBUFFERED 1
+ADD ./shared /src/shared
 ADD ./src /src/src
 ADD ./run.py /src/
 ADD ./cfg /cfg/
+ENV PYTHONPATH "/src/shared"

@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
 from src.controllers.implementations.QueuePusher import QueuePusher
-from src.model import MessageContainer
+from model import MessageContainer
 
 _predefined_message = {"message_type": "error",
                        "message": {"chat_id": 12, "text": "Hello"}}

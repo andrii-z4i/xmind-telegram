@@ -2,7 +2,7 @@ from unittest import TestCase
 from src.controllers.implementations.MessageSender import MessageSender
 from src.exceptions import BadResponseException
 from src.exceptions.retry_exception import RetryException
-from src.model import Message, SentMessage
+from model import Message, SentMessage
 import json
 from unittest.mock import Mock, patch
 

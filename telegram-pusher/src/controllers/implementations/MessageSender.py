@@ -1,10 +1,10 @@
 import src.controllers.interfaces as interfaces
 from src.exceptions import BadResponseException
-from src.model import Message, SentMessage, TelegramResponse
+from model import Message, SentMessage, TelegramResponse
 from src.exceptions.retry_exception import RetryException
 from requests import post, Response
 import json
-from src.configuration.logging_configuration import create_logger, Logger, log_exception
+from configuration.logging_configuration import create_logger, Logger, log_exception
 
 
 class MessageSender(interfaces.MessageSender):

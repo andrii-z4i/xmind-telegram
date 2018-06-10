@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.model import MessageContainer
+from model import MessageContainer
 
 
 class QueuePusher(ABC):

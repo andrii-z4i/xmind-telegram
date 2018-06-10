@@ -2,15 +2,15 @@ import signal
 from argparse import ArgumentParser, Namespace
 import time
 from typing import Any
-from src.configuration.configuration_factory import ConfigurationFactory
-from src.configuration.interfaces.configuration import Configuration
+from configuration.configuration_factory import ConfigurationFactory
+from configuration.interfaces.configuration import Configuration
 from src.controllers.implementations.MessageRegistrar import MessageRegistrar
 from src.controllers.implementations.MessageSender import MessageSender
 from src.controllers.implementations.QueueChannel import QueueChannel
 from src.controllers.implementations.QueueProcessor import QueueProcessor
 from src.controllers.implementations.QueuePusher import QueuePusher
 import src.controllers.interfaces as interfaces
-from src.configuration.logging_configuration import create_logger, Logger, configure_logger, log_exception
+from configuration.logging_configuration import create_logger, Logger, configure_logger, log_exception
 from os import getcwd
 
 

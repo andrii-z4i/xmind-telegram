@@ -1,8 +1,8 @@
 import json
 import pika
 import src.controllers.interfaces as interfaces
-from src.model import MessageContainer
-from src.configuration.logging_configuration import create_logger, Logger, log_exception
+from model import MessageContainer
+from configuration.logging_configuration import create_logger, Logger, log_exception
 
 
 class QueuePusher(interfaces.QueuePusher):

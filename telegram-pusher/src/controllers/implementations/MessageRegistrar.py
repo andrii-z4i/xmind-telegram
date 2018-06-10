@@ -1,9 +1,9 @@
 import json
 import pymysql
 import src.controllers.interfaces as interfaces
-from src.model import MessageContainer
+from model import MessageContainer
 import re
-from src.configuration.logging_configuration import create_logger, Logger, log_exception
+from configuration.logging_configuration import create_logger, Logger, log_exception
 
 
 class MessageRegistrar(interfaces.MessageRegistrar):
