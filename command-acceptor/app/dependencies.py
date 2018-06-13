@@ -11,4 +11,5 @@ class DependencyInjection(object):
     def queue(self, value):
         self._queue = value
 
+
 dependencies = DependencyInjection()

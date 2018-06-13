@@ -1,0 +1,16 @@
+{
+  "en-US":{
+    "operation":{
+      "create":["create", "crate", "crete", "crt"],
+      "delete":["delete", "dlete", "dlt"],
+      "add":["add", "ad"],
+      "get":["get", "gt"]
+    },
+    "subject":{
+      "node":["node", "nod", "nd"],
+      "topic":["topic", "tpic", "topc", "tpc"],
+      "sheet":["sheet", "shet", "sht"],
+      "file":["file", "fle", "fil"]
+    }
+  }
+}

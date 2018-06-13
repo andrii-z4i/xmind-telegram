@@ -9,4 +9,3 @@ class ConfigurationFactory(object):
         parser = Parser('./configuration/%s.ini' % environment)
         parser.parse()
         return ParsedConfiguration(parser)
-        

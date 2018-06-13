@@ -27,3 +27,8 @@ class RabbitMqQueue(IQueue):
                               routing_key=self._queue_name,
                               body=value)
         raise Exception("Channel is not set")
+
+    def get(self):
+        if self._channel:
+            return self._channel.basic_get(self._queue_name, no_ack=False)
+        raise Exception("Channel is not set")
