@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from app.models.ErrorMessage import ErrorMessage
-from app.models.AcceptedMessage import AcceptedMessage
+from model.AcceptedMessage import AcceptedMessage
 
 
 class RequestAnalyser(ABC):

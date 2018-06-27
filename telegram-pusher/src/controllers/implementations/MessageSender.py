@@ -29,8 +29,13 @@ class MessageSender(interfaces.MessageSender):
             self.logger.debug("response ok = false")
             raise BadResponseException('Bad response')
 
-        r: dict = json.loads(response.content.decode('utf-8'))
-        telegram_response = TelegramResponse(r)
+        try:
+            r: dict = json.loads(response.content.decode('utf-8'))
+            telegram_response = TelegramResponse(r)
+        except Exception as e:
+            log_exception(e, self.logger)
+            raise BadResponseException('We got a response without mandatory field(s)')
+
         if telegram_response.success:
             self.logger.debug("Telegram response success = True")
             return telegram_response.result

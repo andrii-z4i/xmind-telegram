@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.models.AcceptedMessage import AcceptedMessage
+from model.AcceptedMessage import AcceptedMessage
 
 
 class MessageHolder(ABC):

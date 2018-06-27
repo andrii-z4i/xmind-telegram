@@ -5,8 +5,6 @@ from app.controllers.user_controller import UserController
 from app.dependencies import dependencies
 
 
-
-
 class UserControllerTests(TestCase):
 
     def setUp(self):
@@ -32,6 +30,6 @@ class UserControllerTests(TestCase):
         controller = UserController(self.message_holder)
 
         result = controller.get()
-        expectation = ({'status': True }, 200)
+        expectation = ({'status': True}, 200)
         self.assertEqual(result, expectation)
         self.queue.add.assert_called_once_with('someValue')

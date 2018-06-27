@@ -1,8 +1,8 @@
 import app.controllers.interfaces as interfaces
 from app.controllers.implementations.MessageHolder import MessageHolder
 from app.controllers.implementations.CommandFactory import CommandFactory
-from app.models.AcceptedMessage import AcceptedMessage
-from app.models.Command import Command
+from model.AcceptedMessage import AcceptedMessage
+from model.Command import Command
 from threading import Event
 
 

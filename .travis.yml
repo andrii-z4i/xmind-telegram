@@ -6,6 +6,6 @@ install:
         - pip install -r command-processor/requirements.txt
         - pip install -r telegram-pusher/requirements.txt
 script:
-        - python -m unittest discover command-acceptor/tests -p *tests.py -s command-acceptor
+        - PYTHONPATH=./shared python -m unittest discover command-acceptor/tests -p *tests.py -s command-acceptor
         - python -m unittest discover command-processor/tests -p *tests.py -s command-processor
         - PYTHONPATH=./shared python -m unittest discover telegram-pusher/tests -p *Tests.py -s telegram-pusher

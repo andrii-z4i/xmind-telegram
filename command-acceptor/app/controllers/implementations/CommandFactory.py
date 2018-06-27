@@ -1,5 +1,5 @@
 import app.controllers.interfaces as interfaces
-from app.models.AcceptedMessage import AcceptedMessage
+from model.AcceptedMessage import AcceptedMessage
 import json
 
 

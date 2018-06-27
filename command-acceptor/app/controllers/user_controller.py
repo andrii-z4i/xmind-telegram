@@ -1,9 +1,6 @@
 from flask_restful import Resource, reqparse
 from flask import request
-import pika
 from app.controllers.implementations.RequestAnalyser import RequestAnalyser
-from app.controllers.implementations.CommandFactory import CommandFactory
-from app.models.ErrorMessage import ErrorMessage
 from app.dependencies import dependencies
 
 parser = reqparse.RequestParser()

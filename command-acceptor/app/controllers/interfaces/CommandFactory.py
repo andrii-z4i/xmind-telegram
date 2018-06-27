@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from app.models.ErrorMessage import ErrorMessage
-from app.models.Command import Command
+from model.Command import Command
 
 
 class CommandFactory(ABC):

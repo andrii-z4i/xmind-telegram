@@ -1,11 +1,6 @@
-from flask import request
 # from controllers import interfaces
 import app.controllers.interfaces as interfaces
-from app.models.User import User
-from app.models.Chat import Chat
-from app.models.ErrorMessage import ErrorMessage
-from app.models.AcceptedMessage import AcceptedMessage
-from jsonobject import DictProperty
+from model.AcceptedMessage import AcceptedMessage
 
 
 class RequestAnalyser(interfaces.RequestAnalyser):

@@ -1,11 +1,7 @@
 from unittest import TestCase
-from unittest.mock import Mock, MagicMock, patch, PropertyMock
 
 from app.controllers.implementations.RequestAnalyser import RequestAnalyser
-from app.models.Chat import Chat
-from app.models.User import User
-from app.models.ErrorMessage import ErrorMessage
-from app.models.AcceptedMessage import AcceptedMessage
+from model.AcceptedMessage import AcceptedMessage
 
 
 class RequestAnalyserTests(TestCase):
