@@ -31,8 +31,7 @@ class TelegramPusherTests(TestCase):
                        body=json.dumps({"chat_id": 12, "text": "Hello"})),
             mk.json_response(code=200, body=response),
             mk.times(1))
-        self._queue.put_message_to_queue(
-            {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}})
+        self._queue.put_message_to_queue(_predefined_message)
         sleep(1)
         self._mock_server.verify()
         messages = self._db.get_all_message()
@@ -46,7 +45,7 @@ class TelegramPusherTests(TestCase):
             mk.json_response(code=404, body=response),
             mk.times(1))
         self._queue.put_message_to_queue(
-            {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}})
+            _predefined_message)
         sleep(1)
         self._mock_server.verify()
         messages = self._db.get_all_message()
@@ -71,3 +70,30 @@ class TelegramPusherTests(TestCase):
         message = messages[0]
         self.assertEqual('{"something": "do"}', message['message'])
         self.assertIsNotNone(message['time'])
+
+    def test_success_case(self):
+        response = {"ok": True}
+        self._mock_server.expect(
+            mk.request(method="POST", path="/botadfaadf/sendMessage",
+                       body=json.dumps({"chat_id": 12, "text": "Hello"})),
+            mk.json_response(code=200, body=response),
+            mk.times(1))
+        self._queue.put_message_to_queue(_predefined_message)
+        sleep(1)
+        self._mock_server.verify()
+        messages = self._db.get_all_message()
+        self.assertEqual(0, len(messages))
+
+    @skip('Skip until retry function doesn\'t exist')
+    def test_retry_after(self):
+        response = {"ok": False, "parameters": {"retry_after": 200}}
+        self._mock_server.expect(
+            mk.request(method="POST", path="/botadfaadf/sendMessage",
+                       body=json.dumps({"chat_id": 12, "text": "Hello"})),
+            mk.json_response(code=200, body=response),
+            mk.times(1))
+        self._queue.put_message_to_queue(_predefined_message)
+        sleep(1)
+        self._mock_server.verify()
+        messages = self._db.get_all_message()
+        self.assertEqual(0, len(messages))

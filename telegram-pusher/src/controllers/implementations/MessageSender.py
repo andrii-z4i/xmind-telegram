@@ -21,6 +21,7 @@ class MessageSender(interfaces.MessageSender):
         response: Response
         try:
             response = post(url, json=message.to_json())
+            self.logger.debug(f'Got a response {response}')
         except Exception as e:
             log_exception(e, self.logger)
             raise BadResponseException('Can\'t send message')
