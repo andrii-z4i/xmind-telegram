@@ -8,7 +8,7 @@ api = Api(app)
 
 
 def configure_rest_api(api, configuration, message_holder):
-    # dependencies.queue = RabbitMqQueue(configuration.queueServer, configuration.queuePort, configuration.queueName)
+    #dependencies.queue = RabbitMqQueue(configuration.queueServer, configuration.queuePort, configuration.queueName)
     api.add_resource(UserController, '/v1/user', resource_class_args=[message_holder] )
 
 

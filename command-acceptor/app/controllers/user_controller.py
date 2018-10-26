@@ -15,13 +15,16 @@ class UserController(Resource):
 
     def get(self):
         status = self._queue.add('someValue')
+        print('Get')
         return {'status': status}, 200
 
     def post(self):
         try:
+            print('post')
             _json = request.json
             _analyser = RequestAnalyser(_json)
             _accepted_message = _analyser.process
+            print(_accepted_message)
             self.message_holder.put(_accepted_message)
             return 200
 

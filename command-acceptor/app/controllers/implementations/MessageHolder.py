@@ -16,9 +16,12 @@ class MessageHolder(interfaces.MessageHolder):
         # if not self.mediator.busy:
         #     self.mediator.start()
         self.event.set()
+        print(2)
 
     def get(self):
+        print(3)
         return self.items.pop()
 
     def size(self):
+        print(4)
         return len(self.items)
