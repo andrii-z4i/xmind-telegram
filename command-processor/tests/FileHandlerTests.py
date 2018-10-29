@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.file.metainformation import MetaFileObject, PathItem, MetaJsonInfo
+from src.file.metainformation import MetaFileObject, PathItem, MetaJsonInfo, MetaInformation
 from src.file.operations.file import FileOperations
 from src.file.user import UserObject
 from src.file.utility import FileUtility
@@ -48,3 +48,49 @@ class FileHandlerTestCase(TestCase):
         _user.working_dir = self._working_dir
         _file_operations = FileOperations(_user)
         _file_operations._create_meta_file(f"{self._user_id}.meta")
+
+    def test_remove_file_from_meta_info(self):
+        _user = UserObject(self._user_id)
+        _user.working_dir = self._working_dir
+        _file_operations = FileOperations(_user)
+        _file_operations._create_meta_file(f"{self._user_id}.meta")
+
+        _file_operations.create(self._test_file)
+        _file_operations.create(self._test_file + "2")
+
+        _file_operations.delete(self._test_file)
+        _file_operations.delete(self._test_file + "2")
+
+        _file_operations.create(self._test_file + "3")
+        _file_operations.create(self._test_file + "4")
+
+        _file_operations.delete(self._test_file + "3")
+        _file_operations.delete(self._test_file + "4")
+    
+    def test_is_current_file_occupied(self):
+        _user = UserObject(self._user_id)
+        _user.working_dir = self._working_dir
+        _file_operations = FileOperations(_user)
+        _file_operations.create(self._test_file)
+        _meta_information = _file_operations.meta_info
+        _current_file = _meta_information.current_file.file_name
+        self.assertEqual(self._test_file, _current_file)
+        self.assertFalse(_meta_information.is_current_file_occupied())
+        _meta_information.occupy_current_file()
+        self.assertTrue(_meta_information.is_current_file_occupied())
+        
+        _file_in_general_section = MetaInformation.get_file_object_by_name(_meta_information.meta_file, _current_file)
+        self.assertTrue(_file_in_general_section.locked)
+
+    def test_change_path(self):
+        _user = UserObject(self._user_id)
+        _user.working_dir = self._working_dir
+        _file_operations = FileOperations(_user)
+        _file_operations.create(self._test_file)
+        _meta_information = _file_operations.meta_info
+        _list = list(_meta_information.path)
+        self.assertTrue(len(_list) == 1)
+        _list.append(PathItem(step_index=1, virtual_index=0))
+        _meta_information.path = _list
+        self.assertTrue(len(list(_meta_information.path)) == 2)
+
