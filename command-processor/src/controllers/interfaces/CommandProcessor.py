@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from model import SentMessage
 from typing import List
-from ResponseContainer import ResponseContainer
+from .ResponseContainer import ResponseContainer
 
 
 class BaseCommand(ABC):
-    
+
     @abstractmethod
     def create(self, user_id: str, title: str) -> bool:
         raise NotImplementedError()
@@ -29,22 +29,22 @@ class CommandProcessor(ABC):
     def process(self, message: SentMessage) -> bool:
         raise NotImplementedError()
 
-    @abstractmethod
     @property
+    @abstractmethod
     def file_commands(self) -> BaseCommand:
         raise NotImplementedError()
 
-    @abstractmethod
     @property
+    @abstractmethod
     def node_commands(self) -> BaseCommand:
         raise NotImplementedError()
 
-    @abstractmethod
     @property
+    @abstractmethod
     def topic_commands(self) -> BaseCommand:
         raise NotImplementedError()
 
-    @abstractmethod
     @property
+    @abstractmethod
     def sheet_commands(self) -> BaseCommand:
         raise NotImplementedError()
