@@ -1,9 +1,8 @@
 import os
-
+import json
 from src.file.user import UserObject
 import src.file.metainformation as metainfo
-import src.file.utility as utility
-import json
+from src.file import utility
 
 
 class FileOperations(object):

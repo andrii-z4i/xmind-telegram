@@ -1,28 +1,35 @@
+"""Mata information processing"""
+
+import json
 from typing import List
 from src.file.user import UserObject
 from src.file.utility import FileUtility
 from jsonobject import JsonObject, StringProperty, BooleanProperty, ListProperty, ObjectProperty, IntegerProperty
-import json
 
 
 class PathItem(JsonObject):
+    """path item"""
     step = IntegerProperty(name='step_index', required=True)
     v_index = IntegerProperty(name='virtual_index', required=True)
 
 
 class MetaFileObject(JsonObject):
+    """meta file object"""
     file_name = StringProperty(name='file', required=True)
     locked = BooleanProperty(name='is_locked', required=True)
     context = ListProperty(name='context', required=True, item_type=PathItem)
 
 
 class MetaJsonInfo(JsonObject):
+    """meta json information"""
     files = ListProperty(MetaFileObject)
     current_file = ObjectProperty(MetaFileObject)
 
 
 class DoesNotExistException(Exception):
+    """Exception for the case when something doesn't exist"""
     def __init__(self, *args, **kwargs):
+        """constructor"""
         super().__init__(args, kwargs)
 
 
@@ -55,8 +62,8 @@ class MetaInformation(object):
         if not FileUtility.file_exists(self._meta_file_path):
             FileUtility.create_file(self._meta_file_path, None)
 
-        with open(self._meta_file_path, "w+t") as f:
-            f.write(json.dumps(meta_json_info.to_json()))
+        with open(self._meta_file_path, "w+t") as file_to_write:
+            file_to_write.write(json.dumps(meta_json_info.to_json()))
 
     @property
     def current_file(self) -> MetaFileObject:
@@ -79,18 +86,19 @@ class MetaInformation(object):
             raise Exception('File is occupied')
         meta_json_info.current_file.locked = True
         # search the file in general section and lock it there as well
-        _file_in_general_section = MetaInformation.get_file_object_by_name(meta_json_info, _current_file_name)
-        
+        _file_in_general_section = \
+            MetaInformation.get_file_object_by_name(meta_json_info, _current_file_name)
+
         if _file_in_general_section:
             _file_in_general_section.locked = True
-        
+
         self._write_meta_file(meta_json_info)
 
     @staticmethod
     def enumerate_files(meta_json_info: MetaJsonInfo) -> List[str]:
         for file in meta_json_info.files:
             yield file.file_name
-    
+
     @staticmethod
     def get_file_object_by_name(meta_json_info: MetaJsonInfo, file_name: str) -> MetaFileObject:
         for _file in meta_json_info.files:
@@ -108,8 +116,9 @@ class MetaInformation(object):
     def path(self, new_path: List[PathItem]) -> None:
         meta_json_info: MetaJsonInfo = self._read_meta_file()
         meta_json_info.current_file.context = new_path
-        _file_in_general_section = MetaInformation.get_file_object_by_name(meta_json_info, self.current_file.file_name)
-        
+        _file_in_general_section = \
+                MetaInformation.get_file_object_by_name(meta_json_info, self.current_file.file_name)
+
         if _file_in_general_section:
             _file_in_general_section.context = new_path
 
