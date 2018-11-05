@@ -8,11 +8,12 @@ class ResponseContainer:
     def __init__(self, titles: List[str]) -> None:
         if not titles:
             raise Exception("Titles have to be passed as a parameter")
-        self._titles = titles.sort()
-        self._indeces = self._generate_virtual_indeces(self._titles)
+        self._titles = titles.copy()
+        self._titles.sort()
+        self._indices = self._generate_virtual_indices(self._titles)
 
-    def _generate_virtual_indeces(self, titles: List[str]) -> List[int]:
-        indeces = [i for i in len(titles)]
+    def _generate_virtual_indices(self, titles: List[str]) -> List[int]:
+        indeces = [i for i in range(len(titles))]
         return indeces
 
     @property
@@ -21,5 +22,7 @@ class ResponseContainer:
 
     @property
     def indices(self):
-        return self._indeces
+        return self._indices
 
+    def get_title_by_index(self, virtual_index: int) -> str:
+        return self._titles[virtual_index]
