@@ -2,6 +2,7 @@ from ..interfaces.BaseCommandProcessor import BaseCommandProcessor
 from ..interfaces.ResponseContainer import ResponseContainer
 from src.file.user import UserObject
 from src.file.operations.file import FileOperations
+from src.file.operations.metainformation import MetaInformation
 
 
 class FileCommandsProcessor(BaseCommandProcessor):
@@ -20,7 +21,20 @@ class FileCommandsProcessor(BaseCommandProcessor):
         return True
 
     def select(self, user_id: str, virtual_index: int) -> bool:
-        raise NotImplementedError()
+        try:
+            _user: UserObject = self._create_user_object(user_id)
+            _meta_information: MetaInformation = MetaInformation(_user)
+            _meta_json = _meta_information.read_meta_file()
+            _files = [file_name for file_name in
+                      MetaInformation.enumerate_files(_meta_json)]
+            _response_container = ResponseContainer(_files)
+            _file_to_use = _response_container.get_title_by_index(virtual_index)
+            _meta_information.change_current_file(_file_to_use)
+        except:
+            return False
+        return True
+
+
 
     def list(self, user_id: str) -> ResponseContainer:
         raise NotImplementedError()

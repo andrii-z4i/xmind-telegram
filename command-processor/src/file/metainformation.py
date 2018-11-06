@@ -48,10 +48,10 @@ class MetaInformation(object):
             FileUtility.create_file(self._meta_file_path, None)
             return False
 
-        meta_json_info: MetaJsonInfo = self._read_meta_file()
+        meta_json_info: MetaJsonInfo = self.read_meta_file()
         return meta_json_info.current_file.locked
 
-    def _read_meta_file(self) -> MetaJsonInfo:
+    def read_meta_file(self) -> MetaJsonInfo:
         if not FileUtility.file_exists(self._meta_file_path):
             raise DoesNotExistException("Meta file doesn't exist")
         content: dict = FileUtility.read_file_as_dict(self._meta_file_path)
@@ -67,7 +67,7 @@ class MetaInformation(object):
 
     @property
     def current_file(self) -> MetaFileObject:
-        meta_json_info: MetaJsonInfo = self._read_meta_file()
+        meta_json_info: MetaJsonInfo = self.read_meta_file()
         current_file = meta_json_info.current_file
         return current_file
 
@@ -80,7 +80,7 @@ class MetaInformation(object):
         return self._meta_file_name
 
     def occupy_current_file(self) -> None:
-        meta_json_info: MetaJsonInfo = self._read_meta_file()
+        meta_json_info: MetaJsonInfo = self.read_meta_file()
         _current_file_name = meta_json_info.current_file.file_name
         if meta_json_info.current_file.locked:
             raise Exception('File is occupied')
@@ -114,7 +114,7 @@ class MetaInformation(object):
 
     @path.setter
     def path(self, new_path: List[PathItem]) -> None:
-        meta_json_info: MetaJsonInfo = self._read_meta_file()
+        meta_json_info: MetaJsonInfo = self.read_meta_file()
         meta_json_info.current_file.context = new_path
         _file_in_general_section = \
                 MetaInformation.get_file_object_by_name(meta_json_info, self.current_file.file_name)
@@ -126,10 +126,10 @@ class MetaInformation(object):
 
     @property
     def meta_file(self) -> MetaJsonInfo:
-        return self._read_meta_file()
+        return self.read_meta_file()
 
     def add_file(self, new_file_name: str) -> None:
-        meta_json_info: MetaJsonInfo = self._read_meta_file()
+        meta_json_info: MetaJsonInfo = self.read_meta_file()
 
         if new_file_name in self.enumerate_files(meta_json_info):
             raise Exception('File with a passed name already exists')
@@ -141,7 +141,7 @@ class MetaInformation(object):
         self._write_meta_file(meta_json_info)
 
     def change_current_file(self, new_file_name: str) -> None:
-        meta_json_info: MetaJsonInfo = self._read_meta_file()
+        meta_json_info: MetaJsonInfo = self.read_meta_file()
 
         if new_file_name not in self.enumerate_files(meta_json_info):
             raise Exception('File with passed name doesn\'t exist')
@@ -158,7 +158,7 @@ class MetaInformation(object):
         self._write_meta_file(meta_json_info)
 
     def remove_file(self, file_name: str) -> None:
-        meta_json_info: MetaJsonInfo = self._read_meta_file()
+        meta_json_info: MetaJsonInfo = self.read_meta_file()
 
         if len(meta_json_info.files) > 1 and self.current_file.file_name == file_name:
             raise Exception("Current file can't be removed")

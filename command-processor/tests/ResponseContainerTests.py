@@ -26,3 +26,4 @@ class ResponseContainerTest(TestCase):
         self.assertEqual(7, _response_container.indices[7])
         self.assertEqual('0', _response_container.titles[0])
         self.assertEqual('__someTitle', _response_container.get_title_by_index(2))
+        self.assertEqual('superTitle2', _response_container.get_title_by_index(7))
