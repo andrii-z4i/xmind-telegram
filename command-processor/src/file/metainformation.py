@@ -171,7 +171,7 @@ class MetaInformation(object):
                 meta_json_info.files.remove(file_object)
                 break
 
-        if not len(meta_json_info.files):
+        if not meta_json_info.files:
             meta_json_info.current_file = None
 
         self._write_meta_file(meta_json_info)
