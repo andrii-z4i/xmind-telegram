@@ -1,4 +1,5 @@
 from unittest import TestCase
+from shutil import rmtree as removedirs
 from src.controllers.implementations.FileCommandsProcessor import \
 FileCommandsProcessor
 
@@ -9,7 +10,7 @@ class FileCommandsProcessorTest(TestCase):
         self._file_cp = FileCommandsProcessor()
 
     def tearDown(self):
-        pass
+        removedirs(self._user_id)
 
     def test_create(self):
         _result = self._file_cp.create(self._user_id, 'some_file.xmind')

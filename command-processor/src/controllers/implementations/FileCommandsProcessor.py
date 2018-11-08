@@ -13,10 +13,11 @@ class FileCommandsProcessor(BaseCommandProcessor):
 
     def create(self, user_id: str, title: str) -> bool:
         _user: UserObject = self._create_user_object(user_id)
-        _file_operations: FileOperations = FileOperations(user_id)
+        _file_operations: FileOperations = FileOperations(_user)
         try:
             _file_operations.create(title)
-        except:
+        except Exception as ex:
+            print(ex)
             return False
         return True
 
@@ -60,5 +61,5 @@ class FileCommandsProcessor(BaseCommandProcessor):
 
     def _create_user_object(self, user_id: str) -> UserObject:
         _user: UserObject = UserObject(user_id)
-        _user.working_dir = f'./working_dir/{user_id}'
+        _user.working_dir = f'./{user_id}'
         return _user

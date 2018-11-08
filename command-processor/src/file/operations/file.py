@@ -27,7 +27,7 @@ class FileOperations(object):
             meta_file = self._meta_info.meta_file
 
         if file_name in self._meta_info.enumerate_files(meta_file):
-            raise Exception('File already exists')
+            raise Exception(f'File {file_name} already exists')
         if utility.FileUtility.file_exists(file_name):
             raise Exception('File already exists, but is not present in meta info')
 

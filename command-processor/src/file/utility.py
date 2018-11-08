@@ -36,9 +36,9 @@ class FileUtility(object):
         return content
 
     @staticmethod
-    def create_folder(path) -> None:
+    def create_folder(path: str) -> None:
         if not os.path.exists(path):
-            os.mkdir(path)
+            os.makedirs(path)
         elif not os.path.isdir(path):
             return
 

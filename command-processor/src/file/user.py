@@ -12,6 +12,9 @@ class UserObject:
         self._user_id: str = user_id
         self._user_working_dir: str = None
 
+    def __str__(self) -> str:
+        return f'{self.working_dir}/{self._user_id}'
+
     @property
     def user_id(self) -> str:
         """user id"""
