@@ -11,10 +11,7 @@ class SheetCommandsProcessor(BaseCommandProcessor):
 
     def create(self, user_id: str, title: str) -> bool:
         try:
-            _, _meta_json = self.read_meta_file(user_id)
-            _current_file = _meta_json.current_file.file_name
-            _xmind_workbook = xmind.load(self.get_full_file_path(user_id, \
-                _current_file))
+            _xmind_workbook, _current_file = self.get_workbook(user_id)
             _new_sheet = _xmind_workbook.createSheet()
             _new_sheet.setTitle(title)
             _xmind_workbook.addSheet(_new_sheet)
@@ -26,10 +23,7 @@ class SheetCommandsProcessor(BaseCommandProcessor):
 
     def select(self, user_id: str, virtual_index: int) -> bool:
         try:
-            _, _meta_json = self.read_meta_file(user_id)
-            _current_file = _meta_json.current_file.file_name
-            _xmind_workbook = xmind.load(self.get_full_file_path(user_id, \
-                _current_file))
+            _xmind_workbook, _current_file = self.get_workbook(user_id)
             _sheets = [sheet.getTitle() for sheet in _xmind_workbook.getSheets()]
             _response_container = ResponseContainer(_sheets)
             _sheet_to_use = \
@@ -43,20 +37,14 @@ class SheetCommandsProcessor(BaseCommandProcessor):
             return False
 
     def list(self, user_id: str) -> ResponseContainer:
-        _, _meta_json = self.read_meta_file(user_id)
-        _current_file = _meta_json.current_file.file_name
-        _xmind_workbook = xmind.load(self.get_full_file_path(user_id, \
-            _current_file))
+        _xmind_workbook, _ = self.get_workbook(user_id)
         _sheets = [sheet.getTitle() for sheet in _xmind_workbook.getSheets()]
         _response_container = ResponseContainer(_sheets)
         return _response_container
 
     def delete(self, user_id: str, virtual_index: int) -> bool:
         try:
-            _, _meta_json = self.read_meta_file(user_id)
-            _current_file = _meta_json.current_file.file_name
-            _xmind_workbook = xmind.load(self.get_full_file_path(user_id, \
-                _current_file))
+            _xmind_workbook, _current_file = self.get_workbook(user_id)
             _sheets = [sheet.getTitle() for sheet in _xmind_workbook.getSheets()]
             _response_container = ResponseContainer(_sheets)
             _sheet_to_use = \
@@ -71,10 +59,15 @@ class SheetCommandsProcessor(BaseCommandProcessor):
 
     def current(self, user_id: str) -> str:
         try:
-            _, _meta_json = self.read_meta_file(user_id)
-            _current_file = _meta_json.current_file.file_name
-            _xmind_workbook = xmind.load(self.get_full_file_path(user_id, \
-                _current_file))
+            _xmind_workbook, _ = self.get_workbook(user_id)
             return _xmind_workbook.getPrimarySheet().getTitle()
         except:
             return None
+
+    def get_workbook(self, user_id: str) -> \
+        (xmind.core.workbook.WorkbookDocument, str):
+        _, _meta_json = self.read_meta_file(user_id)
+        _current_file = _meta_json.current_file.file_name
+        _xmind_workbook = xmind.load(self.get_full_file_path(user_id, \
+                _current_file))
+        return _xmind_workbook, _current_file
