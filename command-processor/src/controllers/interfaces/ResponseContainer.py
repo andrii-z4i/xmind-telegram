@@ -25,4 +25,6 @@ class ResponseContainer:
         return self._indices
 
     def get_title_by_index(self, virtual_index: int) -> str:
+        if virtual_index < 0 or virtual_index > len(self._titles):
+            raise Exception('Index is out of range')
         return self._titles[virtual_index]

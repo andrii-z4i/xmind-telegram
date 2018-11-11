@@ -2,7 +2,7 @@ from ..interfaces.BaseCommandProcessor import BaseCommandProcessor
 from ..interfaces.ResponseContainer import ResponseContainer
 from src.file.user import UserObject
 from src.file.operations.file import FileOperations
-from src.file.metainformation import MetaInformation
+from src.file.metainformation import MetaInformation, MetaJsonInfo
 
 
 class FileCommandsProcessor(BaseCommandProcessor):
@@ -23,9 +23,7 @@ class FileCommandsProcessor(BaseCommandProcessor):
 
     def select(self, user_id: str, virtual_index: int) -> bool:
         try:
-            _user: UserObject = self._create_user_object(user_id)
-            _meta_information: MetaInformation = MetaInformation(_user)
-            _meta_json = _meta_information.read_meta_file()
+            _meta_information, _meta_json = self._read_meta_file(user_id)
             _files = [file_name for file_name in
                       MetaInformation.enumerate_files(_meta_json)]
             _response_container = ResponseContainer(_files)
@@ -36,9 +34,7 @@ class FileCommandsProcessor(BaseCommandProcessor):
         return True
 
     def list(self, user_id: str) -> ResponseContainer:
-        _user: UserObject = self._create_user_object(user_id)
-        _meta_information: MetaInformation = MetaInformation(_user)
-        _meta_json = _meta_information.read_meta_file()
+        _, _meta_json = self._read_meta_file(user_id)
         _files = [file_name for file_name in
                   MetaInformation.enumerate_files(_meta_json)]
         _response_container = ResponseContainer(_files)
@@ -47,9 +43,7 @@ class FileCommandsProcessor(BaseCommandProcessor):
 
     def delete(self, user_id: str, virtual_index: int) -> bool:
         try:
-            _user: UserObject = self._create_user_object(user_id)
-            _meta_information: MetaInformation = MetaInformation(_user)
-            _meta_json = _meta_information.read_meta_file()
+            _meta_information, _meta_json = self._read_meta_file(user_id)
             _files = [file_name for file_name in
                       MetaInformation.enumerate_files(_meta_json)]
             _response_container = ResponseContainer(_files)
@@ -59,7 +53,20 @@ class FileCommandsProcessor(BaseCommandProcessor):
             return False
         return True
 
+    def current(self, user_id: str) -> str:
+        try:
+            _, _meta_json = self._read_meta_file(user_id)
+            return _meta_json.current_file.file_name
+        except:
+            return None
+
     def _create_user_object(self, user_id: str) -> UserObject:
         _user: UserObject = UserObject(user_id)
         _user.working_dir = f'./{user_id}'
         return _user
+
+    def _read_meta_file(self, user_id: str) -> (MetaInformation, MetaJsonInfo):
+        _user: UserObject = self._create_user_object(user_id)
+        _meta_information: MetaInformation = MetaInformation(_user)
+        _meta_json = _meta_information.read_meta_file()
+        return _meta_information, _meta_json

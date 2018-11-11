@@ -20,3 +20,7 @@ class BaseCommandProcessor(ABC):
     @abstractmethod
     def delete(self, user_id: str, virtual_index: int) -> bool:
         raise NotImplementedError()
+
+    @abstractmethod
+    def current(self, user_id: str) -> str:
+        raise NotImplementedError()
