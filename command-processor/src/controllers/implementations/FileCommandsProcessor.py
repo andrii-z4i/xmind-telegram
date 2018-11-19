@@ -22,6 +22,8 @@ class FileCommandsProcessor(BaseCommandProcessor):
                 _current_file))
             _sheet = _xmind_workbook.getPrimarySheet()
             _sheet.setTitle('NewSheet')
+            _topic = _sheet.getRootTopic()
+            _topic.setTitle('NewTopic')
             xmind.save(_xmind_workbook, self.get_full_file_path(user_id, \
                 _current_file))
         except Exception as ex:

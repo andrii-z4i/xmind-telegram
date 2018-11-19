@@ -19,7 +19,6 @@ class SheetCommandsProcessorTest(TestCase):
 
     def tearDown(self):
         removedirs(self._user_id)
-        pass
 
     def test_create(self):
         _result = self._sheet_cp.create(self._user_id, 'NewSheet')
