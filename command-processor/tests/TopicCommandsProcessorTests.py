@@ -27,10 +27,10 @@ class TopicCommandsProcessorTest(TestCase):
         removedirs(self._user_id)
 
     def test_create(self):
-        # _result = self._topic_cp.create(self._user_id, 'NewTopic1')
-        # self.assertTrue(_result)
-        # _result = self._topic_cp.create(self._user_id, 'NewTopic2')
-        # self.assertTrue(_result)
+        _result = self._topic_cp.create(self._user_id, 'NewTopic1')
+        self.assertTrue(_result)
+        _result = self._topic_cp.create(self._user_id, 'NewTopic2')
+        self.assertTrue(_result)
         _rc = self._topic_cp.list(self._user_id)
-        self.assertListEqual(_rc.titles, ["NewTopic", "NewTopic2"])
+        self.assertListEqual(_rc.titles, ["NewTopic1", "NewTopic2"])
 

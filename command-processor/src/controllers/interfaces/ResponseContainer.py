@@ -6,8 +6,6 @@ class ResponseContainer:
     """Response container"""
 
     def __init__(self, titles: List[str]) -> None:
-        if not titles:
-            raise Exception("Titles have to be passed as a parameter")
         self._titles = titles.copy()
         self._titles.sort()
         self._indices = self._generate_virtual_indices(self._titles)
