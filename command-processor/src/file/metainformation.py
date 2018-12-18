@@ -18,7 +18,7 @@ class MetaFileObject(JsonObject):
     """meta file object"""
     file_name = StringProperty(name='file', required=True)
     locked = BooleanProperty(name='is_locked', required=True)
-    context = ListProperty(name='context', required=True, item_type=PathItem)
+    context = ListProperty(name='context', required=False, item_type=PathItem)
     current_sheet = IntegerProperty(name='current_sheet', required=True)
 
 
@@ -136,10 +136,10 @@ class MetaInformation(object):
         if new_file_name in self.enumerate_files(meta_json_info):
             raise Exception('File with a passed name already exists')
 
-        _path_item = PathItem(step_index=0, virtual_index=0, sheet_index=0)
+        # _path_item = PathItem(step_index=0, virtual_index=0, sheet_index=0)
 
         _new_file = MetaFileObject(file=new_file_name, is_locked=False, \
-                context=[_path_item], current_sheet=0)
+                current_sheet=0)
         meta_json_info.files.append(_new_file)
         self._write_meta_file(meta_json_info)
 

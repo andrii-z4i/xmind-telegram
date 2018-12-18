@@ -89,8 +89,8 @@ class FileHandlerTestCase(TestCase):
         _file_operations.create(self._test_file)
         _meta_information = _file_operations.meta_info
         _list = list(_meta_information.path)
-        self.assertTrue(len(_list) == 1)
+        self.assertTrue(len(_list) == 0)
         _list.append(PathItem(step_index=1, virtual_index=0, sheet_index=0))
         _meta_information.path = _list
-        self.assertTrue(len(list(_meta_information.path)) == 2)
+        self.assertTrue(len(list(_meta_information.path)) == 1)
 

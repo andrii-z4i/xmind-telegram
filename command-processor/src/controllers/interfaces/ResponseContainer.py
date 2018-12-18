@@ -6,7 +6,7 @@ class ResponseContainer:
     """Response container"""
 
     def __init__(self, titles: List[str]) -> None:
-        self._titles = titles.copy()
+        self._titles: List[str] = titles.copy()
         self._titles.sort()
         self._indices = self._generate_virtual_indices(self._titles)
 
@@ -26,3 +26,6 @@ class ResponseContainer:
         if virtual_index < 0 or virtual_index > len(self._titles):
             raise Exception('Index is out of range')
         return self._titles[virtual_index]
+    
+    def get_index_by_title(self, title: str) -> int:
+        return self._titles.index(title)

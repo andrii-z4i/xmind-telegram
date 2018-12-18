@@ -34,3 +34,16 @@ class TopicCommandsProcessorTest(TestCase):
         _rc = self._topic_cp.list(self._user_id)
         self.assertListEqual(_rc.titles, ["NewTopic1", "NewTopic2"])
 
+    def test_select(self):
+        _result = self._topic_cp.create(self._user_id, 'NewTopic1')
+        self.assertTrue(_result)
+        _result = self._topic_cp.select(self._user_id, 0)
+        _result = self._topic_cp.create(self._user_id, 'NewTopic2')
+        self.assertTrue(_result)
+        _rc = self._topic_cp.list(self._user_id)
+        self.assertTrue(len(_rc.titles) == 1)
+        _result = self._topic_cp.select(self._user_id, 0)
+        _rc = self._topic_cp.list(self._user_id)
+        self.assertTrue(len(_rc.titles) == 0)
+        
+
