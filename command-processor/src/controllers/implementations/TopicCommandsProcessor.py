@@ -59,7 +59,10 @@ class TopicCommandsProcessor(BaseCommandProcessor):
         raise NotImplementedError()
 
     def current(self, user_id: str) -> str:
-        raise NotImplementedError()
+        _path_item, _sheet, _wb, _current_file = self.get_sheet(user_id)
+        _topic_element = self.get_topic_by_path(_sheet, _path_item)
+        _topic_title = _topic_element.getTitle()
+        return ResponseContainer([_topic_title])
 
     def get_sheet(self, user_id: str) -> \
         (List[PathItem], xmind.core.sheet.SheetElement, xmind.core.workbook.WorkbookDocument, MetaFileObject):

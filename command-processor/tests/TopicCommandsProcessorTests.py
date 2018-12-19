@@ -13,7 +13,6 @@ class TopicCommandsProcessorTest(TestCase):
 
     def setUp(self):
         self._user_id = 'test_user_id'
-        self._sheet_cp = SheetCommandsProcessor()
         self._topic_cp = TopicCommandsProcessor()
         self._file_cp = FileCommandsProcessor()
         _result = self._file_cp.create(self._user_id, 'some_file.xmind')
@@ -75,3 +74,32 @@ class TopicCommandsProcessorTest(TestCase):
         _result = self._topic_cp.select(self._user_id, 0)
         _rc = self._topic_cp.list(self._user_id)
         self.assertTrue(len(_rc.titles) == 1)
+
+    def test_current(self):
+        _result = self._topic_cp.create(self._user_id, '1')
+        self.assertTrue(_result)
+        _result = self._topic_cp.create(self._user_id, '2')
+        self.assertTrue(_result)
+        _result = self._topic_cp.create(self._user_id, '3')
+        self.assertTrue(_result)
+        _rc = self._topic_cp.current(self._user_id)
+        self.assertEqual(1, len(_rc.titles))
+        self.assertEqual('NewTopic', _rc.titles[0])
+        _rc = self._topic_cp.list(self._user_id)
+        self.assertEqual(3, len(_rc.titles))
+        self.assertListEqual(['1', '2', '3'], _rc.titles)
+        _result = self._topic_cp.select(self._user_id, 2)
+        self.assertTrue(_result)
+        _result = self._topic_cp.create(self._user_id, '3.1')
+        self.assertTrue(_result)
+        _result = self._topic_cp.create(self._user_id, '3.2')
+        self.assertTrue(_result)
+        _result = self._topic_cp.create(self._user_id, '3.3')
+        self.assertTrue(_result)
+        _rc = self._topic_cp.current(self._user_id)
+        self.assertEqual(1, len(_rc.titles))
+        self.assertEqual('3', _rc.titles[0])
+        _rc = self._topic_cp.list(self._user_id)
+        self.assertEqual(3, len(_rc.titles))
+        self.assertListEqual(['3.1', '3.2', '3.3'], _rc.titles)
+        
