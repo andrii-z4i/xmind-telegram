@@ -13,7 +13,6 @@ class TopicCommandsProcessor(BaseCommandProcessor):
     def create(self, user_id: str, title: str) -> bool:
         try:
             _path, _sheet, _wb, _current_file = self.get_sheet(user_id)
-            # here we need to get to the element by path
             _topic_element = self.get_topic_by_path(_sheet, _path)
             _new_topic = TopicElement(ownerWorkbook=_wb)
             _new_topic.setTitle(title)
@@ -26,21 +25,29 @@ class TopicCommandsProcessor(BaseCommandProcessor):
             return False
 
     def select(self, user_id: str, virtual_index: int) -> bool:
-        _response_container: ResponseContainer = self.list(user_id)
-        if virtual_index == -1:
-            # go up
-            raise NotImplementedError()
-        try:
-            _response_container.get_title_by_index(virtual_index)
-        except Exception as _ex:
-            return False
-        
         _, _, _, _current_file = self.get_sheet(user_id)
-        _path_item = _current_file.context
-        _path_item.append(PathItem(step=len(_path_item), v_index=virtual_index, sheet_index=_current_file.current_sheet))
+        _all_path_items = _current_file.context
+        _current_sheet_path_items = self.get_path_item_by_sheet_index(_current_file.current_sheet, _current_file)
+
+        if virtual_index == -1:
+            
+            if not _all_path_items:
+                return True
+            
+            _last_path_item = _current_sheet_path_items[-1]
+            _all_path_items.remove(_last_path_item)
+        else:    
+            _response_container: ResponseContainer = self.list(user_id)
+            try:
+                _response_container.get_title_by_index(virtual_index)
+            except Exception as _ex:
+                return False
+            
+            
+            _all_path_items.append(PathItem(step=len(_current_sheet_path_items), v_index=virtual_index, sheet_index=_current_file.current_sheet))
         
         _meta_information, _ = self.read_meta_file(user_id)
-        _meta_information.path = _path_item
+        _meta_information.path = _all_path_items
         return True
 
     def list(self, user_id: str) -> ResponseContainer:
@@ -55,7 +62,7 @@ class TopicCommandsProcessor(BaseCommandProcessor):
         raise NotImplementedError()
 
     def get_sheet(self, user_id: str) -> \
-        (List[PathItem], xmind.core.sheet.SheetElement, xmind.core.workbook.WorkbookDocument, str):
+        (List[PathItem], xmind.core.sheet.SheetElement, xmind.core.workbook.WorkbookDocument, MetaFileObject):
         _, _meta_json = self.read_meta_file(user_id)
         _current_file = _meta_json.current_file
         _current_sheet = _meta_json.current_file.current_sheet
