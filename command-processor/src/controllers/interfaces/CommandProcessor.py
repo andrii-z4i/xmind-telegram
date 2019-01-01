@@ -18,11 +18,6 @@ class CommandProcessor(ABC):
 
     @property
     @abstractmethod
-    def node_commands(self) -> BaseCommandProcessor:
-        raise NotImplementedError()
-
-    @property
-    @abstractmethod
     def topic_commands(self) -> BaseCommandProcessor:
         raise NotImplementedError()
 
