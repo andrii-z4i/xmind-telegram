@@ -56,7 +56,22 @@ class TopicCommandsProcessor(BaseCommandProcessor):
         return self.get_response_container(_topic_element)
 
     def delete(self, user_id: str, virtual_index: int) -> bool:
-        raise NotImplementedError()
+        _path_item, _sheet, _wb, _current_file = self.get_sheet(user_id)
+        _topic_element = self.get_topic_by_path(_sheet, _path_item)
+        _childs = _topic_element.getFirstChildNodeByTagName(const.TAG_CHILDREN)
+        
+        # Direct maninupation with DOM -- Begin -- 
+        _first_child = _childs.firstChild
+        if len(_first_child.childNodes) <= virtual_index:
+            return False
+
+        _first_child.removeChild(_first_child.childNodes[virtual_index])
+        # Direct maninupation with DOM -- End -- 
+
+        xmind.save(_wb, self.get_full_file_path(user_id, \
+                _current_file.file_name))
+        return True
+
 
     def current(self, user_id: str) -> str:
         _path_item, _sheet, _wb, _current_file = self.get_sheet(user_id)
