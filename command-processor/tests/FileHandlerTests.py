@@ -1,5 +1,4 @@
 from unittest import TestCase
-
 from src.file.metainformation import MetaFileObject, PathItem, MetaJsonInfo, MetaInformation
 from src.file.operations.file import FileOperations
 from src.file.user import UserObject
@@ -31,11 +30,12 @@ class FileHandlerTestCase(TestCase):
         _file_operations.create(self._test_file)
 
     def test_meta_object(self):
-        _path_item = PathItem(step_index=0, virtual_index=0)
+        _path_item = PathItem(step_index=0, virtual_index=0, sheet_index=0)
         _json_value = _path_item.to_json()
         self.assertIsNotNone(_json_value)
 
-        _file_object = MetaFileObject(file='abc.file', is_locked=False, context=[_path_item])
+        _file_object = MetaFileObject(file='abc.file', is_locked=False, \
+                context=[_path_item], current_sheet=0)
         _json_value = _file_object.to_json()
         self.assertIsNotNone(_json_value)
 
@@ -89,8 +89,8 @@ class FileHandlerTestCase(TestCase):
         _file_operations.create(self._test_file)
         _meta_information = _file_operations.meta_info
         _list = list(_meta_information.path)
-        self.assertTrue(len(_list) == 1)
-        _list.append(PathItem(step_index=1, virtual_index=0))
+        self.assertTrue(len(_list) == 0)
+        _list.append(PathItem(step_index=1, virtual_index=0, sheet_index=0))
         _meta_information.path = _list
-        self.assertTrue(len(list(_meta_information.path)) == 2)
+        self.assertTrue(len(list(_meta_information.path)) == 1)
 

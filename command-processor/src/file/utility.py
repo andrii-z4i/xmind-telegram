@@ -19,10 +19,10 @@ class FileUtility(object):
         if not file_name:
             raise Exception('File name has to be set')
 
-        f = open(file_name, "w+")
+        file_to_write = open(file_name, "w+")
         if content:
-            f.write(content)
-        f.close()
+            file_to_write.write(content)
+        file_to_write.close()
 
     @staticmethod
     def read_file_as_dict(file_name: str) -> dict:
@@ -36,9 +36,9 @@ class FileUtility(object):
         return content
 
     @staticmethod
-    def create_folder(path) -> None:
+    def create_folder(path: str) -> None:
         if not os.path.exists(path):
-            os.mkdir(path)
+            os.makedirs(path)
         elif not os.path.isdir(path):
             return
 
