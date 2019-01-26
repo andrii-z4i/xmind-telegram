@@ -1,16 +1,15 @@
 {
   "en-US":{
     "operation":{
-      "create":["create", "crate", "crete", "crt"],
-      "delete":["delete", "dlete", "dlt"],
-      "add":["add", "ad"],
-      "get":["get", "gt"]
+      "create":["create", "crate", "crete", "crt", "craete", "creat"],
+      "delete":["delete", "dlete", "dlt", "delet", "del"],
+      "select":["select", "slect", "selct", "slct", "selekt"],
+      "list":["list", "lst", "lis"]
     },
     "subject":{
-      "node":["node", "nod", "nd"],
-      "topic":["topic", "tpic", "topc", "tpc"],
-      "sheet":["sheet", "shet", "sht"],
-      "file":["file", "fle", "fil"]
+      "topic":["topic", "topics", "tpic", "topc", "tpc"],
+      "sheet":["sheet", "sheets", "shet", "shets", "sht"],
+      "file":["file", "files", "fle", "fil"]
     }
   }
 }

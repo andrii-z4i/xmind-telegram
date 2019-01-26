@@ -32,12 +32,11 @@ class Mediator(interfaces.Mediator):
                     factory: CommandFactory = CommandFactory(_message)
                     try:
                         command: Command = factory.prepare_command()
-                        command_message_container = SentMessageContainer(message=command.to_json(),
-                                                                      message_type='response')
-                        self.processor_queue_pusher.put_message_to_queue(message=command_message_container, retry_after=2)
+                        command_message_container = SentMessageContainer(message=command.to_json(), message_type='response')
+                        self.processor_queue_pusher.put_message_to_queue(message=command_message_container, retry_after=2) #todo: do we need to check the response (true, false)
                         # place where command should be send to the queue
                     except Exception as e:
-                        error_message_container = SentMessageContainer(message=e, message_type='error')
+                        error_message_container = SentMessageContainer(message=e.args[0], message_type='error')
                         self.error_queue_pusher.put_message_to_queue(message=error_message_container, retry_after=2)
                         pass
 
