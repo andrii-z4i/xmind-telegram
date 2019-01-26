@@ -32,6 +32,7 @@ def configure_logger(logFile: str = None) -> None:
     lg.basicConfig(format=FORMAT, level=lg.DEBUG,
                    filename='./logs/%s.log' % fileNameToStoreLogs)
     lg.basicConfig(format=FORMAT, level=lg.DEBUG)
+    global configured
     configured = True
 
 

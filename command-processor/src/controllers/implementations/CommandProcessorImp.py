@@ -17,6 +17,7 @@ class CommandProcessorImpl(CommandProcessor):
             SheetCommandsProcessor()
         self._topic_commands_processor: BaseCommandProcessor = TopicCommandsProcessor()
 
+    # FIXME: We need to use another model which is coming from acceptor
     def process(self, message: model.SentMessage) -> bool:
         raise NotImplementedError()
 
