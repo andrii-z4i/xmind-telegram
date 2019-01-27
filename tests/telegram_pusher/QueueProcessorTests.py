@@ -1,7 +1,8 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch, ANY
 from cmp_telegram_pusher.src.controllers.implementations.QueueProcessor import QueueProcessor
-from cmp_telegram_pusher.src.controllers.interfaces import QueueChannel, MessageSender, MessageRegistrar, QueuePusher
+from cmp_telegram_pusher.src.controllers.interfaces import QueueChannel, MessageSender, MessageRegistrar
+from shared.queue.QueuePusherImpl import QueuePusher
 from cmp_telegram_pusher.src.exceptions import RetryException, BadResponseException
 
 _predefined_message = {"message_type": "error", "message": {"chat_id": 12, "text": "Hello"}}

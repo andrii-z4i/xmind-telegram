@@ -2,8 +2,8 @@ from jsonobject import JsonObject, IntegerProperty, StringProperty
 
 
 class Command(JsonObject):
-    operation = StringProperty()
-    subject = StringProperty()
+    operation = StringProperty(choices=['create', 'delete', 'select', 'list', 'current'], required=True)
+    subject = StringProperty(choices=['file', 'sheet', 'topic'], required=True)
     name = StringProperty()
     virtual_id = IntegerProperty()
     user_id = IntegerProperty()

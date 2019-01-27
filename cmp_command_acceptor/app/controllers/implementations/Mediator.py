@@ -6,14 +6,14 @@ from shared.model.Command import Command
 from shared.model.ErrorMessage import ErrorMessage
 from threading import Event
 from app.controllers.implementations.ProcessorQueuePusher import ProcessorQueuePusher
-from app.controllers.implementations.ErrorQueuePusher import ErrorQueuePusher
+from shared.queue.QueuePusherImpl import QueuePusher
 from shared.model.SentMessageContainer import SentMessageContainer
-from shared.model.ErrorMessageContainer import ErrorMessageContainer
+from shared.model.MessageContainer import MessageContainer
 
 
 class Mediator(interfaces.Mediator):
     def __init__(self, event: Event, message_holder: MessageHolder, processor_queue_pusher: ProcessorQueuePusher,
-                 error_queue_pusher: ErrorQueuePusher) -> None:
+                 error_queue_pusher: QueuePusher) -> None:
         self.active: bool = False
         self.event = event
         self.message_holder = message_holder

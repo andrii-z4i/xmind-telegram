@@ -2,6 +2,7 @@ import json
 import re
 from threading import Thread
 import cmp_telegram_pusher.src.controllers.interfaces as interfaces
+from shared.queue.QueuePusher import QueuePusher
 from cmp_telegram_pusher.src.exceptions import BadResponseException
 from cmp_telegram_pusher.src.exceptions import RetryException
 from shared.model import MessageContainer
@@ -14,13 +15,13 @@ class QueueProcessor(interfaces.QueueProcessor):
             queue_channel: interfaces.QueueChannel,
             message_sender: interfaces.MessageSender,
             message_registrar: interfaces.MessageRegistrar,
-            queue_pusher: interfaces.QueuePusher
+            queue_pusher: QueuePusher
     ) -> None:
         self.logger: Logger = create_logger("QueueProcessor")
         self.logger.debug("in __init__")
         self._message_sender: interfaces.MessageSender = message_sender
         self._message_registrar: interfaces.MessageRegistrar = message_registrar
-        self._queue_pusher: interfaces.QueuePusher = queue_pusher
+        self._queue_pusher: QueuePusher = queue_pusher
         self._channel: interfaces.QueueChannel = queue_channel
         self._channel.set_inner_message_processor(self.process_event)
         self._thread = Thread(

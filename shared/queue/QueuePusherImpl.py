@@ -1,11 +1,11 @@
 import json
 import pika
-import src.controllers.interfaces as interfaces
-from shared.model import SentMessageContainer
+from shared.model import MessageContainer
 from shared.configuration.logging_configuration import create_logger, Logger, log_exception
+from shared.queue.QueuePusher import QueuePusher as QueuePusherInterface
 
 
-class ProcessorQueuePusher(interfaces.QueuePusher):
+class QueuePusher(QueuePusherInterface):
 
     def __init__(self, queue_server: str, queue_port: int, queue_name: str) -> None:
         super().__init__()
@@ -24,16 +24,14 @@ class ProcessorQueuePusher(interfaces.QueuePusher):
             self.logger.debug("close connection")
             _connection.close()
 
-    def put_message_to_queue(self, message: SentMessageContainer, retry_after: int) -> bool:
+    def put_message_to_queue(self, message: MessageContainer, retry_after: int) -> bool:
         self.logger.debug("in put message to queue")
         self.logger.debug(
             f"Message: {message.to_json()}, retry_after: {retry_after}")
-        print('in put message to queue ', message.to_json())
         if self._channel:
             message.retry_count = 1 if not message.retry_count else message.retry_count + 1
             message.retry_after = retry_after
             self.logger.debug("Before publish")
-            print(12345, self._queue_name)
             return self._channel.basic_publish(
                 exchange='',
                 routing_key=self._queue_name,

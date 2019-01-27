@@ -1,7 +1,7 @@
 from cmp_command_acceptor.app.controllers import interfaces
 from shared.model.AcceptedMessage import AcceptedMessage
 from shared.model.MessageToProcessor import MessageToProcessor
-from shared.model.Command import Command
+from shared.model import Command
 import json
 
 
@@ -123,7 +123,8 @@ class CommandFactory(interfaces.CommandFactory):
         return _result
 
     def _get_commands_dict(self) -> dict:
-        with open('./cmp_command_acceptor/configuration/commands_dict.json') as f:  # todo: path to the file should be imported as parameter
+        # FIXME: path to the file should be imported as parameter
+        with open('./cmp_command_acceptor/configuration/commands_dict.json') as f:  
             data = json.load(f)
         return data
 
@@ -134,10 +135,12 @@ class CommandFactory(interfaces.CommandFactory):
             return data_dict['en-US']
 
     def prepare_command(self):
-        _command = Command(user_id=self._user_id, chat_id=self._chat_id)
+        _command = Command(user_id=self._user_id, chat_id=self._chat_id, operation='create', subject='topic')
         _command_dict = self._get_commands_dict()
         _data_by_language = self.get_data_by_language(self._language, _command_dict)
         try:
+            # FIXME: performance of the validation for delete case will be 4 times worse compare to create
+            # it should be mapping based on the request
             _validation_result = self._create_validation(_data_by_language)
             if _validation_result:
                 _command.operation = _validation_result['operation']
@@ -175,6 +178,7 @@ class CommandFactory(interfaces.CommandFactory):
                     _command.subject = None
                 _command.name = None
                 return _command
+            # FIXME: there is no implementation of 'current' method
             else:
                 raise Exception('Command is not valid!')
         except:
