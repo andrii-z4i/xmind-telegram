@@ -2,8 +2,8 @@ language: python
 python:
         - "3.6"
 install:
-        - pip install -r command-acceptor/requirements.txt
-        - pip install -r command-processor/requirements.txt
-        - pip install -r telegram-pusher/requirements.txt
+        - pip install -r cmp_command_acceptor/requirements.txt
+        - pip install -r cmp_command_processor/requirements.txt
+        - pip install -r cmp_telegram_pusher/requirements.txt
 script:
         - python -m unittest discover -p *Tests.py -s tests
