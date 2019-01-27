@@ -1,6 +1,6 @@
 from jsonobject import JsonObject, IntegerProperty, ObjectProperty, StringProperty
-from model import SentMessage
-from model import MessageToProcessor
+from shared.model import SentMessage
+from shared.model import MessageToProcessor
 
 
 class SentMessageContainer(JsonObject):

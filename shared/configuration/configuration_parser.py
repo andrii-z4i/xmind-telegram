@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-from configuration.logging_configuration import create_logger, Logger, log_exception
+from shared.configuration.logging_configuration import create_logger, Logger, log_exception
 
 
 class Parser(object):

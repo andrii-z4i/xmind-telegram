@@ -1,5 +1,5 @@
 from jsonobject import JsonObject, IntegerProperty, ObjectProperty, StringProperty
-from model.ErrorMessage import ErrorMessage
+from shared.model.ErrorMessage import ErrorMessage
 
 
 class ErrorMessageContainer(JsonObject):

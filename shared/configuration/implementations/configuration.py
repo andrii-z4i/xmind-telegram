@@ -1,8 +1,8 @@
 from typing import Any
 
-import configuration.interfaces.configuration as interfaces
-from configuration.configuration_parser import Parser
-from configuration.logging_configuration import create_logger, Logger, log_exception
+import shared.configuration.interfaces.configuration as interfaces
+from shared.configuration.configuration_parser import Parser
+from shared.configuration.logging_configuration import create_logger, Logger, log_exception
 
 
 class Configuration(interfaces.Configuration):
