@@ -1,4 +1,4 @@
-from app.acceptor_configuration.configuration_interface import shared.configuration
+from cmp_command_acceptor.app.acceptor_configuration.configuration_interface import Configuration
 
 
 class ParsedConfiguration(Configuration):
