@@ -1,6 +1,6 @@
 import xmind
-from ..interfaces.BaseCommandProcessor import BaseCommandProcessor
-from ..interfaces.ResponseContainer import ResponseContainer
+from cmp_command_processor.src.controllers.interfaces.BaseCommandProcessor import BaseCommandProcessor
+from cmp_command_processor.src.controllers.interfaces.ResponseContainer import ResponseContainer
 
 
 class SheetCommandsProcessor(BaseCommandProcessor):
