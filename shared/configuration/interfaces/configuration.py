@@ -1,63 +1,59 @@
 from abc import ABC, abstractmethod
 
-
-class Configuration(ABC):
+class ServerConfiguration(ABC):
     @property
     @abstractmethod
-    def queueServer(self) -> str:
-        return NotImplemented
-
+    def host(self) -> str:
+        raise NotImplementedError()
+    
     @property
     @abstractmethod
-    def queuePort(self) -> int:
-        return NotImplemented
+    def port(self) -> int:
+        raise NotImplementedError()
 
+
+class QueueConfiguration(ServerConfiguration):
     @property
     @abstractmethod
-    def messagesQueueName(self) -> str:
-        return NotImplemented
+    def queueName(self) -> str:
+        raise NotImplementedError()
 
+
+class TelegramConfiguration(ServerConfiguration):
     @property
     @abstractmethod
-    def errorsQueueName(self) -> str:
-        return NotImplemented
-
+    def botKey(self) -> str:
+        raise NotImplementedError()
+    
     @property
     @abstractmethod
-    def telegramProtocol(self) -> str:
-        return NotImplemented
+    def protocol(self) -> str:
+        raise NotImplementedError()
 
+class DatabaseConfiguration(ServerConfiguration):
     @property
     @abstractmethod
-    def telegramPort(self) -> int:
-        return NotImplemented
-
+    def user(self) -> str:
+        raise NotImplementedError()
+    
     @property
     @abstractmethod
-    def telegramBotKey(self) -> str:
-        return NotImplemented
+    def password(self) -> str:
+        raise NotImplementedError()
 
+
+class TelegramPusherConfiguration(ABC):
     @property
     @abstractmethod
-    def telegramHost(self) -> str:
-        return NotImplemented
-
+    def queue(self) -> QueueConfiguration:
+        raise NotImplementedError()
+    
     @property
     @abstractmethod
-    def databaseHost(self) -> str:
-        return NotImplemented
-
+    def telegram(self) -> TelegramConfiguration:
+        raise NotImplementedError()
+    
     @property
     @abstractmethod
-    def databaseName(self) -> str:
-        return NotImplemented
-
-    @property
-    @abstractmethod
-    def databaseUser(self) -> str:
-        return NotImplemented
-
-    @property
-    @abstractmethod
-    def databasePassword(self) -> str:
-        return NotImplemented
+    def database(self) -> DatabaseConfiguration:
+        raise NotImplementedError()

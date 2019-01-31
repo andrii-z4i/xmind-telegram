@@ -19,15 +19,14 @@ class Parser(object):
             self.logger.debug(f"read file {self._file_name}")
             self._parser.read_file(_file)
 
-    def get_value(self, parameter: str) -> str:
+    def get_value(self, section: str, parameter: str) -> str:
         self.logger.debug(f"in get value for '{parameter}'")
-        if '.' not in parameter:
-            self.logger.debug("'.' is not in parameter")
+        if not section:
+            self.logger.debug("section wasn't passed")
             return self._parser[parameter]
+        
+        if not parameter:
+            self.logger.error("parameter is empty")
+            raise Exception("Parameter wasn't passed")
 
-        path = parameter.split('.')
-        if len(path) > 2:
-            self.logger.error('Path length has to be no longer than 2')
-            raise Exception('Path length has to be no longer than 2')
-
-        return self._parser[path[0]][path[1]]
+        return self._parser[section][parameter]

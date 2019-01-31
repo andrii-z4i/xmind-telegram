@@ -2,10 +2,15 @@ from unittest import TestCase
 from unittest.mock import patch, Mock, MagicMock, call
 from shared.configuration.configuration_parser import Parser
 from shared.configuration.configuration_factory import ConfigurationFactory
-from shared.configuration.implementations.configuration import Configuration
 
 
 class ConfigurationTests(TestCase):
+    def test_configuration(self):
+        from shared.configuration.implementations.configuration import QueueConfiguration
+
+        a = QueueConfiguration()
+        b = a.server
+
 
     @patch('shared.configuration.configuration_parser.ConfigParser')
     def test_configuration_parser_constructor(self, configuration_parser: Mock):
