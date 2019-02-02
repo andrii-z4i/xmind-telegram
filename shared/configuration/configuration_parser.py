@@ -28,5 +28,6 @@ class Parser(object):
         if not parameter:
             self.logger.error("parameter is empty")
             raise Exception("Parameter wasn't passed")
+        
 
-        return self._parser[section][parameter]
+        return self._parser.get(section, parameter)
