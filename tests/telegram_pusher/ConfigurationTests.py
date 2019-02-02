@@ -43,51 +43,49 @@ class ConfigurationTests(TestCase):
     #     _config_parser_mock.read_file.assert_called_once()
     #     _file.__exit__.assert_called_once()
 
-    # @patch('shared.configuration.configuration_parser.ConfigParser')
-    # def test_configuration_parser_get_value_no_dot(self, config_parser: Mock):
-    #     _config_parser_mock = MagicMock()
-    #     _config_parser_mock.__getitem__.return_value = 'Ok'
-    #     config_parser.return_value = _config_parser_mock
+    @patch('shared.configuration.configuration_parser.ConfigParser')
+    def test_configuration_parser_get_value_no_dot(self, config_parser: Mock):
+        config_parser.get.return_value = 'Ok'
 
-    #     _parser = Parser('aaaa')
-    #     # we skip _parser.parse here
+        _parser = Parser('aaaa')
+        # we skip _parser.parse here
 
-    #     self.assertEqual('Ok', _parser.get_value('section1','ddd'))
-    #     _config_parser_mock.__getitem__.assert_called_once_with('ddd')
+        with self.assertRaises(Exception) as _exception:
+            _parser.get_value('ddd')
 
-    # @patch('shared.configuration.configuration_parser.ConfigParser')
-    # def test_configuration_parser_get_value(self, config_parser: Mock):
-    #     _second_index = MagicMock()
-    #     _second_index.__getitem__.return_value = 'Ok'
-    #     _config_parser_mock = MagicMock()
-    #     _config_parser_mock.__getitem__.return_value = _second_index
-    #     config_parser.return_value = _config_parser_mock
+        self.assertEqual(_exception.exception.args[0],
+                         "Path length has to be no longer than 2")
 
-    #     _parser = Parser('aaaa')
-    #     # we skip _parser.parse here
+    @patch('shared.configuration.configuration_parser.ConfigParser')
+    def test_configuration_parser_get_value(self, config_parser: Mock):
+        _config_parser_mock = MagicMock()
+        _config_parser_mock.get.return_value = 'Ok'
+        config_parser.return_value = _config_parser_mock
 
-    #     self.assertEqual('Ok', _parser.get_value('ddd.bbb'))
-    #     _config_parser_mock.__getitem__.assert_called_once_with('ddd')
-    #     _second_index.__getitem__.assert_called_once_with('bbb')
+        _parser = Parser('aaaa')
+        # we skip _parser.parse here
 
-    # @patch('shared.configuration.configuration_parser.ConfigParser')
-    # def test_configuration_parser_get_value_three_dots(self, config_parser: Mock):
-    #     _second_index = MagicMock()
-    #     _second_index.__getitem__.return_value = 'Ok'
-    #     _config_parser_mock = MagicMock()
-    #     _config_parser_mock.__getitem__.return_value = _second_index
-    #     config_parser.return_value = _config_parser_mock
+        self.assertEqual('Ok', _parser.get_value('ddd.bbb'))
+        _config_parser_mock.get.assert_called_once_with('ddd', 'bbb')
 
-    #     _parser = Parser('aaaa')
-    #     # we skip _parser.parse here
+    @patch('shared.configuration.configuration_parser.ConfigParser')
+    def test_configuration_parser_get_value_three_dots(self, config_parser: Mock):
+        _second_index = MagicMock()
+        _second_index.__getitem__.return_value = 'Ok'
+        _config_parser_mock = MagicMock()
+        _config_parser_mock.__getitem__.return_value = _second_index
+        config_parser.return_value = _config_parser_mock
 
-    #     with self.assertRaises(Exception) as _exception:
-    #         _parser.get_value('ddd.bbb.cccc')
+        _parser = Parser('aaaa')
+        # we skip _parser.parse here
 
-    #     self.assertEqual(_exception.exception.args[0],
-    #                      "Path length has to be no longer than 2")
-    #     _config_parser_mock.__getitem__.assert_not_called()
-    #     _second_index.__getitem__.assert_not_called()
+        with self.assertRaises(Exception) as _exception:
+            _parser.get_value('ddd.bbb.cccc')
+
+        self.assertEqual(_exception.exception.args[0],
+                         "Path length has to be no longer than 2")
+        _config_parser_mock.__getitem__.assert_not_called()
+        _second_index.__getitem__.assert_not_called()
 
     @patch('shared.configuration.configuration_factory.Parser')
     @patch('shared.configuration.configuration_factory.impl.TelegramPusherConfiguration')
