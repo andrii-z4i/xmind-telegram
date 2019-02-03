@@ -8,40 +8,40 @@ import shared.configuration.implementations.configuration as impl
 
 class ConfigurationTests(TestCase):
 
-    # @patch('shared.configuration.configuration_parser.ConfigParser')
-    # def test_configuration_parser_constructor(self, configuration_parser: Mock):
-    #     configuration_parser.return_value = 'a'
-    #     _parser = Parser('some_name')
-    #     self.assertIsNotNone(_parser)
-    #     configuration_parser.assert_called_once()
-    #     self.assertEqual('some_name', _parser._file_name)
+    @patch('shared.configuration.configuration_parser.ConfigParser')
+    def test_configuration_parser_constructor(self, configuration_parser: Mock):
+        configuration_parser.return_value = 'a'
+        _parser = Parser('some_name')
+        self.assertIsNotNone(_parser)
+        configuration_parser.assert_called_once()
+        self.assertEqual('some_name', _parser._file_name)
 
-    # @patch('shared.configuration.configuration_parser.open')
-    # def test_configuration_parser_parse_empty_file_name(self, open_file: Mock):
-    #     with self.assertRaises(Exception) as _exception:
-    #         _parser = Parser(None)
-    #         _parser.parse()
+    @patch('shared.configuration.configuration_parser.open')
+    def test_configuration_parser_parse_empty_file_name(self, open_file: Mock):
+        with self.assertRaises(Exception) as _exception:
+            _parser = Parser(None)
+            _parser.parse()
 
-    #     self.assertEqual(_exception.exception.args[0], "File name is empty")
-    #     open_file.assert_not_called()
+        self.assertEqual(_exception.exception.args[0], "File name is empty")
+        open_file.assert_not_called()
 
-    # @patch('shared.configuration.configuration_parser.open')
-    # @patch('shared.configuration.configuration_parser.ConfigParser')
-    # def test_configuration_parser_parse(self, config_parser: Mock, open_file: Mock):
-    #     _file = MagicMock()
-    #     _file.__exit__.return_value = None
-    #     open_file.return_value = _file
-    #     _config_parser_mock = Mock()
-    #     _config_parser_mock.read_file.return_value = 'Ok'
-    #     config_parser.return_value = _config_parser_mock
+    @patch('shared.configuration.configuration_parser.open')
+    @patch('shared.configuration.configuration_parser.ConfigParser')
+    def test_configuration_parser_parse(self, config_parser: Mock, open_file: Mock):
+        _file = MagicMock()
+        _file.__exit__.return_value = None
+        open_file.return_value = _file
+        _config_parser_mock = Mock()
+        _config_parser_mock.read_file.return_value = 'Ok'
+        config_parser.return_value = _config_parser_mock
 
-    #     _parser = Parser('aaaa')
-    #     _parser.parse()
+        _parser = Parser('aaaa')
+        _parser.parse()
 
-    #     config_parser.assert_called_once()
-    #     open_file.assert_called_once_with('aaaa')
-    #     _config_parser_mock.read_file.assert_called_once()
-    #     _file.__exit__.assert_called_once()
+        config_parser.assert_called_once()
+        open_file.assert_called_once_with('aaaa')
+        _config_parser_mock.read_file.assert_called_once()
+        _file.__exit__.assert_called_once()
 
     @patch('shared.configuration.configuration_parser.ConfigParser')
     def test_configuration_parser_get_value_no_dot(self, config_parser: Mock):
