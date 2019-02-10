@@ -1,6 +1,6 @@
 from jsonobject import JsonObject, ObjectProperty, StringProperty, DictProperty
 from flask import request
-from model.AcceptedMessage import AcceptedMessage
+from shared.model.AcceptedMessage import AcceptedMessage
 
 
 class ErrorMessage(JsonObject):

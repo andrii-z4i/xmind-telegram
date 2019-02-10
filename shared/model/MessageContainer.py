@@ -1,5 +1,5 @@
 from jsonobject import JsonObject, IntegerProperty, ObjectProperty, StringProperty
-from model import Message
+from shared.model import Message
 
 
 class MessageContainer(JsonObject):

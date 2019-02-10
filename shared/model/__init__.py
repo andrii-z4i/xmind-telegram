@@ -5,6 +5,8 @@ from .SentMessage import SentMessage
 from .TelegramResponse import TelegramResponse
 from .User import User
 from .MessageContainer import MessageContainer
+from .AcceptedMessage import AcceptedMessage
+from .Command import Command
 
 __all__ = [
     'Chat',
@@ -13,5 +15,7 @@ __all__ = [
     'SentMessage',
     'TelegramResponse',
     'User',
-    'MessageContainer'
+    'MessageContainer',
+    'AcceptedMessage',
+    'Command',
 ]

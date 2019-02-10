@@ -1,6 +1,6 @@
 from jsonobject import JsonObject, BooleanProperty, ObjectProperty, StringProperty
-from model.SentMessage import SentMessage
-from model.ResponseParameters import ResponseParameters
+from shared.model.SentMessage import SentMessage
+from shared.model.ResponseParameters import ResponseParameters
 
 
 class TelegramResponse(JsonObject):
